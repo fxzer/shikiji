@@ -6,15 +6,15 @@ outline: deep
 
 <Badges name="rehype-shikiji" />
 
-[rehype](https://github.com/rehypejs/rehype) plugin for Shikiji.
+Shikiji 插件 [rehype](https://github.com/rehypejs/rehype)。
 
-## Install
+## 安装
 
 ```bash
 npm i -D rehype-shikiji
 ```
 
-## Usage
+## 用法
 
 ```ts
 import { unified } from 'unified'
@@ -38,11 +38,11 @@ const file = await unified()
   .process(await fs.readFile('./input.md'))
 ```
 
-## Features
+## 特性
 
-### Line Highlight
+### 高亮行
 
-In addition to the features of `shikiji`, this plugin also supports line highlighting. You can add `{1,3-4}` after the language name to highlight the specified lines. For example:
+除了 `shikiji` 的特性，这个插件还支持高亮行。您可以在语言名后面加上 `{1,3-4}` 来高亮指定的行。例如：
 
 ````md
 # Hello World
@@ -54,3 +54,12 @@ console.log('line3') // highlighted
 console.log('line4') // highlighted
 ```
 ````
+
+预览效果：
+
+```js {1,3-4}
+console.log('line1') // highlighted
+console.log('line2')
+console.log('line3') // highlighted
+console.log('line4') // highlighted
+```

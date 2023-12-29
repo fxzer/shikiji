@@ -7,20 +7,20 @@ import vite from './vite.config'
 import { rendererFloatingVue } from './render-floating-vue'
 
 const GUIDES: DefaultTheme.NavItemWithLink[] = [
-  { text: 'Getting Started', link: '/guide/' },
-  { text: 'Installation', link: '/guide/install' },
-  { text: 'Shorthands', link: '/guide/shorthands' },
-  { text: 'Bundles', link: '/guide/bundles' },
-  { text: 'Dual Themes', link: '/guide/dual-themes' },
-  { text: 'Transformers', link: '/guide/transformers' },
-  { text: 'Compat Build', link: '/guide/compat' },
-  { text: 'Custom Themes', link: '/guide/load-theme' },
-  { text: 'Custom Languages', link: '/guide/load-lang' },
+  { text: '开始使用', link: '/guide/' },
+  { text: '安装', link: '/guide/install' },
+  { text: '简写形式', link: '/guide/shorthands' },
+  { text: '构建', link: '/guide/bundles' },
+  { text: '双主题', link: '/guide/dual-themes' },
+  { text: '转换器', link: '/guide/transformers' },
+  { text: '兼容性构建', link: '/guide/compat' },
+  { text: '自定义主题', link: '/guide/load-theme' },
+  { text: '自定义语言', link: '/guide/load-lang' },
 ]
 
 const REFERENCES: DefaultTheme.NavItemWithLink[] = [
-  { text: 'Themes', link: '/themes' },
-  { text: 'Languages', link: '/languages' },
+  { text: '主题', link: '/themes' },
+  { text: '语言', link: '/languages' },
 ]
 
 const INTEGRATIONS: DefaultTheme.NavItemWithLink[] = [
@@ -32,9 +32,9 @@ const INTEGRATIONS: DefaultTheme.NavItemWithLink[] = [
 ]
 
 const VERSIONS: DefaultTheme.NavItemWithLink[] = [
-  { text: `v${version} (current)`, link: '/' },
-  { text: `Release Notes`, link: 'https://github.com/antfu/shikiji/releases' },
-  { text: `Contributing`, link: 'https://github.com/antfu/shikiji/blob/main/CONTRIBUTING.md' },
+  { text: `v${version} (当前)`, link: '/' },
+  { text: `版本发布`, link: 'https://github.com/antfu/shikiji/releases' },
+  { text: `贡献`, link: 'https://github.com/antfu/shikiji/blob/docs-zh/CONTRIBUTING.md' },
 ]
 
 // https://vitepress.dev/reference/site-config
@@ -125,9 +125,19 @@ export default defineConfig({
   vite,
   themeConfig: {
     logo: '/logo.svg',
+    outline: 'deep', // 侧边栏深度:数字或者deep
+    outlineTitle: '文章目录',
+    lastUpdatedText: '上次更新',
+    returnToTopLabel: '返回顶部',
+    sidebarMenuLabel: '目录',
+    darkModeSwitchLabel: '主题切换',
+    docFooter: {
+      prev: '上一页',
+      next: '下一页',
+    },
     nav: [
       {
-        text: 'Guide',
+        text: '引导',
         items: [
           {
             items: GUIDES,
@@ -135,11 +145,11 @@ export default defineConfig({
         ],
       },
       {
-        text: 'Integrations',
+        text: '集成',
         items: INTEGRATIONS,
       },
       {
-        text: 'References',
+        text: '参考',
         items: REFERENCES,
       },
       // {
@@ -157,15 +167,15 @@ export default defineConfig({
       {
         '/': [
           {
-            text: 'Guide',
+            text: '引导',
             items: GUIDES,
           },
           {
-            text: 'Integrations',
+            text: '集成',
             items: INTEGRATIONS,
           },
           {
-            text: 'References',
+            text: '参考',
             items: REFERENCES,
           },
         ],
@@ -173,20 +183,20 @@ export default defineConfig({
     ),
 
     editLink: {
-      pattern: 'https://github.com/antfu/shikiji/edit/main/docs/:path',
-      text: 'Suggest changes to this page',
+      pattern: 'https://github.com/fxzer/shikiji/edit/docs-zh/docs/:path',
+      text: '本页修改建议',
     },
     search: {
       provider: 'local',
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/antfu/shikiji' },
+      { icon: 'github', link: 'https://github.com/fxzer/shikiji' },
     ],
 
     footer: {
-      message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2021 Pine Wu, 2023-PRESENT Anthony Fu.',
+      message: 'Released under the <a href="https://github.com/fxzer/shikiji/blob/master/LICENSE">MIT License</a>.',
+      copyright: 'Copyright © 2023-present <a href="https://github.com/fxzer">fxzer</a>.',
     },
   },
 

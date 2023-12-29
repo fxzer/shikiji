@@ -1,8 +1,7 @@
-# Load Custom Themes
+# 加载自定义主题
 
-Check [All Builtin Themes](/themes) as well.
-
-You can load custom themes by passing a `Theme` object into the themes array.
+查看 [所有内置主题](/themes)。
+您可以将 `Theme` 对象传递到 `themes` 数组中来加载自定义主题。
 
 ```ts
 import { getHighlighter } from 'shikiji'
@@ -19,9 +18,9 @@ const html = highlighter.codeToHtml(code, {
 })
 ```
 
-You can also load themes after the highlighter has been created.
+您也可以在创建高亮器后加载主题。
 
-```ts
+```ts {7}
 import { getHighlighter } from 'shikiji'
 
 const myTheme = JSON.parse(fs.readFileSync('my-theme.json', 'utf8'))
@@ -36,4 +35,4 @@ const html = highlighter.codeToHtml(code, {
 })
 ```
 
-The theme should be a TextMate theme in JSON object. For example, [it should looks like this](https://github.com/antfu/vscode-theme-vitesse/blob/main/themes/vitesse-dark.json).
+主题必须是一个 TextMate 语法 JSON 主题对象。例如，[它应该看起来像这样](https://github.com/antfu/vscode-theme-vitesse/blob/main/themes/vitesse-dark.json)。

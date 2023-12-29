@@ -2,9 +2,9 @@
 
 <Badges name="shikiji-transformers" />
 
-Collective of common transformers for Shikiji, inspired by [shiki-processor](https://github.com/innocenzi/shiki-processor).
+Shikiji 的常用转换器集合，灵感来自 [shiki-processor](https://github.com/innocenzi/shiki-processor)
 
-## Install
+## 安装
 
 ```bash
 npm i -D shikiji-transformers
@@ -28,13 +28,11 @@ const html = codeToHtml(code, {
 })
 ```
 
-## Transformers
+## 转换器
 
 ### `transformerNotationDiff`
 
-Use `[!code ++]` and `[!code --]` to mark added and removed lines.
-
-For example, the following code
+用 `[!code ++]` 和 `[!code --]` 来标记增加和删除的行。例如，下面的代码
 
 ````md
 ```ts
@@ -45,7 +43,7 @@ export function foo() {
 ```
 ````
 
-will be transformed to
+将会被渲染成
 
 ```ts
 export function foo() {
@@ -72,9 +70,9 @@ export function foo() {
 </pre>
 ```
 
-### `transformerNotationHighlight`
+### `transformerNotationHighlight` 差异标记
 
-Use `[!code highlight]` to highlight a line (adding `highlighted` class).
+使用 `[!code highlight]` 突出显示一行（将被添加 highlighted 类名）。
 
 ```ts
 export function foo() {
@@ -82,9 +80,9 @@ export function foo() {
 }
 ```
 
-### `transformerNotationFocus`
+### `transformerNotationFocus` 聚焦标记
 
-Use `[!code focus]` to focus a line (adding `focused` class).
+使用 `[!code focus]` 聚焦一行 （将被添加 focused 类名）
 
 ```ts
 export function foo() {
@@ -92,9 +90,9 @@ export function foo() {
 }
 ```
 
-### `transformerNotationErrorLevel`
+### `transformerNotationErrorLevel` 错误标记
 
-Use `[!code error]`, `[!code warning]`, to mark a line with an error level (adding `highlighted error`, `highlighted warning` class).
+使用 `[!code error]`, `[!code warning]` 来标记一行的错误等级（将被添加 `highlighted error`, `highlighted warning` 类名）。
 
 ```ts
 export function foo() {
@@ -103,18 +101,17 @@ export function foo() {
 }
 ```
 
-### `transformerRenderWhitespace`
+### `transformerRenderWhitespace` 空白渲染
 
-Render whitespaces (tabs and spaces) as individual spans, with classes `tab` and `space`.
+渲染空格（tab 和空格）为单独的 span，带有 `tab` 和 `space` 类名。
 
-With some CSS, you can make it look like this:
-
+使用一些 CSS，您可以让它看起来像这样：
 <img width="293" alt="image" src="https://github.com/antfu/shikiji/assets/11247099/01b7c4ba-6d63-4e74-8fd7-68a9f901f3de">
 
 ### `transformerCompactLineOptions`
 
-Support for `shiki`'s `lineOptions` that is removed in `shikiji`.
+`shiki` 支持的 `lineOptions`，这在 `shikiji` 中被移除了。
 
 ### `transformerRemoveLineBreak`
 
-Remove line breaks between `<span class="line">`. Useful when you set `display: block` to `.line` in CSS.
+移除 `<span class="line">` 之间的换行符。当您在 CSS 中设置 `.line` 的 `display: block` 时很有用。

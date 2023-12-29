@@ -2,25 +2,25 @@
 outline: deep
 ---
 
-# Bundles
+# 捆绑包
 
-The main `shikiji` entries bundles all supported themes and languages via lazy dynamic imports. The efficiency shouldn't be a concern to most of the scenarios as the grammar would only be imported/downloaded when it is used. However, when you bundle Shikiji into browsers runtime or web workers, even those files are not imported, they still add up to your dist size. We provide the [fine-grained bundle](/guide/install#fine-grained-bundle) to help you compose languages and themes one-by-one as you need.
+`shikiji` 主入口支持动态懒加载所有的主题和语言。对于大多数场景来说，这不会影响效率，因为语法只有在使用时才会被导入/下载。但是，当您将 Shikiji 捆绑到浏览器运行时或 Web Worker 时，即使这些文件没有被导入，它们仍然会增加您的 dist 大小。我们提供了[精细捆绑](/guide/install#fine-grained-bundle)来帮助您按需逐个组合语言和主题。
 
-To make it easier, we also provide some pre-composed bundles for you to use:
+我们也提供预制包更方便供您使用：
 
 ## `shikiji/bundle/full`
 
-> [Bundle Size](/guide/#bundle-size): 6.4 MB (minified), 1.2 MB (gzip), async chunks included
+> [捆绑包大小](/guide/#bundle-size): 6.4 MB (minified), 1.2 MB (gzip), 包含异步块
 
-The full bundle includes all themes and languages, same as the main `shikiji` entry.
+完整的捆绑包包括所有主题和语言，与主 shikiji 条目相同。
 
 ## `shikiji/bundle/web`
 
-> [Bundle Size](/guide/#bundle-size): 3.8 MB (minified), 695 KB (gzip), async chunks included
+> [捆绑包大小](/guide/#bundle-size): 3.8 MB (minified), 695 KB (gzip), 包含异步块
 
-The bundle the includes all themes and common web languages like (HTML, CSS, JS, TS, JSON, Markdown, etc.) and some web frameworks (Vue, JSX, Svelte, etc.).
+该捆绑包包括所有主题和常见的 Web 语言，如（HTML、CSS、JS、TS、JSON、Markdown 等）和一些 Web 框架（Vue、JSX、Svelte 等）。
 
-Use as normal, all functions from `shikiji` are also available in the bundle:
+`shikiji` 中的所有函数也在捆绑包中可用：
 
 ```ts
 import {

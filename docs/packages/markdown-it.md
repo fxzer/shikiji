@@ -2,7 +2,7 @@
 
 <Badges name="markdown-it-shikiji" />
 
-[Markdown It](https://markdown-it.github.io/) plugin for Shikiji.
+Shikiji 插件 [Markdown It](https://markdown-it.github.io/)。
 
 ## Install
 
@@ -26,9 +26,9 @@ md.use(await Shikiji({
 }))
 ```
 
-## Fine-grained Bundle
+## 细粒度包
 
-By default, the full bundle of `shikiji` will be imported. If you are Shikiji's [fine-grained bundle](/guide/install#fine-grained-bundle), you can import from `markdown-it-shikiji/core` and pass your own highlighter:
+默认情况下，会导入完整的 `shikiji` 包。如果您使用的是 Shikiji 的[细粒度包](/guide/install#细粒度包)，您可以从 `markdown-it-shikiji/core` 导入并传入您自己的高亮器：
 
 ```ts
 import MarkdownIt from 'markdown-it'
@@ -51,11 +51,11 @@ const md = MarkdownIt()
 md.use(fromHighlighter(highlighter, { /* options */ }))
 ```
 
-## Features
+## 特性
 
-### Line Highlight
+### 高亮行
 
-In addition to the features of `shikiji`, this plugin also supports line highlighting. You can add `{1,3-4}` after the language name to highlight the specified lines. For example:
+除了 `shikiji` 的特性，这个插件还支持高亮行。您可以在语言名后面加上 `{1,3-4}` 来高亮指定的行。例如：
 
 ````md
 # Hello World

@@ -8,39 +8,39 @@ outline: deep
 
 <span text-xl text-green>
 <b><span text-brand-yellow>Shiki</span><span text-brand-red>ji</span></b> <ruby text-brand-yellow>式<rt>shiki</rt></ruby><ruby text-brand-red>辞<rt>ji</rt></ruby>
-</span> is a beautiful and powerful syntax highlighter based on TextMate grammar and themes, the same engine as VS Code's syntax highlighting. Provides a very accurate and fast syntax highlighting for almost any mainstream programming language.
+</span> 是一个基于 TextMate 语法和主题的漂亮而强大的语法高亮器，与 VS Code 的语法高亮引擎相同。为几乎所有主流编程语言提供非常准确和快速的语法高亮。
 
-No custom RegEx to maintain, no custom CSS to maintain, no custom HTML to maintain. And as your favorite languages and themes in VS Code evolve - your syntax highlighting will evolve too.
+无需维护自定义正则表达式，无需维护自定义 CSS，无需维护自定义 HTML。随着 VS Code 中您喜欢的语言和主题的发展，语法突出显示也会发生变化。
 
-Shikiji is a ESM-rewrite of [Shiki](https://github.com/shikijs/shiki) with quite many improvements. We aim to [merge this project back to Shiki as a milestone update](https://github.com/shikijs/shiki/issues/510). [Breaking changes from Shiki and the compatibility build](/guide/compat) if you are migrating.
+Shikiji 是基于 [Shiki](https://github.com/shikijs/shiki) 用 ESM 语法重写，并有很多改进。 我们的目标是[将这个项目合并回 Shiki 作为里程碑式的更新](https://github.com/shikijs/shiki/issues/510)。[如果要迁移，则对 Shiki 和兼容性版本进行重大更改](/guide/compat)。
 
-About the name, <ruby text-lg text-brand-yellow>式<rt>shiki</rt></ruby><ruby text-lg text-brand-red>辞<rt>ji</rt></ruby> is a Japanese word meaing ["Ceremonial Speech"](https://jisho.org/word/%E5%BC%8F%E8%BE%9E). <ruby text-brand-yellow text-lg>式<rt>shiki</rt></ruby> is inherited from [shiki](https://github.com/shikijs/shiki) means ["Style"](https://jisho.org/word/%E5%BC%8F) and <ruby text-brand-red text-lg>辞<rt>ji</rt></ruby> means ["Word"](https://jisho.org/word/%E8%BE%9E).
+关于这个名字， <ruby text-lg text-brand-yellow>式<rt>shiki</rt></ruby><ruby text-lg text-brand-red>辞<rt>ji</rt></ruby> 是一个日语单词，[礼仪致辞](https://jisho.org/word/%E5%BC%8F%E8%BE%9E)的意思。 <ruby text-brand-yellow text-lg>式<rt>shiki</rt></ruby> 继承自 [shiki](https://github.com/shikijs/shiki) 意思是 [“风格“](https://jisho.org/word/%E5%BC%8F) ， <ruby text-brand-red text-lg>辞<rt>ji</rt></ruby> 的意思是 [“字“](https://jisho.org/word/%E8%BE%9E).
 
-Oh btw, the code blocks in this document is highlighted by Shikiji, as you'd expect \:)
+哦，顺便说一句，正如您所期望的那样，本文档中的代码块由 Shikiji 突出显示 \:)
 
-## Features
+## 特性
 
-- All grammars/themes/wasm served as pure-ESM, no more [CDN](https://github.com/shikijs/shiki#specify-a-custom-root-directory), no more [assets](https://github.com/shikijs/shiki#specify-how-to-load-webassembly).
-- Portable. Does not rely on Node.js APIs or the filesystem, works in any modern JavaScript runtime.
-- ESM-only ([CDN Usage](/guide/install#cdn-usage), [CJS Usage](/guide/install#cjs-usage))
-- [Bundles languages/themes composedly](/guide/install#fine-grained-bundle)
-- [Light/Dark themes support](/guide/dual-themes)
-- [AST-based transformers addons](/guide/transformers)
-- [`hast` support](/guide/transformers#codetohast)
-- [TypeScript TwoSlash](/packages/twoslash)
-- [Shiki-compatible build](/guide/compat)
+- 所有语法/主题/wasm 作为纯 ESM，不再有 [CDN](https://github.com/shikijs/shiki#specify-a-custom-root-directory)，不再有[assets](https://github.com/shikijs/shiki#specify-how-to-load-webassembly)。
+- 便携式。不依赖于 Node.js API 或文件系统，适用于任何现代 JavaScript 运行时。
+- 仅限 ESM ([CDN 用法](/guide/install#cdn-usage), [CJS 用法](/guide/install#cjs-usage))
+- [组合式捆绑语言/主题](/guide/install#fine-grained-bundle)
+- [浅色/深色主题支持](/guide/dual-themes)
+- [基于 AST 的转换器插件](/guide/transformers)
+- [支持 `hast` ](/guide/transformers#codetohast)
+- [TypeScript TwoSlash](/packages/twoslash) 支持（TS 编译语法提示）
+- [与 Shiki 兼容的构建](/guide/compat)
 
-## Playground
+## 演练场
 
-Here is a little playground for you to try out how Shikiji highlights your code. Unlike other code blocks that ran on the build time, this playground is rendered on the client side in the browser. Themes and languages are loaded on demand.
+这里有一个小游乐场，供您尝试 Shikiji 如何高亮展示您的代码。与在生成时运行的其他代码块不同，此 演练场在浏览器的客户端呈现。主题和语言是按需加载的。
 
 <ShikijiMiniPlayground />
 
-[Install Shikiji](/guide/install) to use it in your project.
+[安装 Shikiji](/guide/install) 在您的项目中使用它。
 
-## Who is using?
+## 谁正在用？
 
-Projects that depend on Shikiji (sort alphabetically):
+依赖于 Shikiji 的项目（按字母顺序排序）：
 
 - [Astro](https://docs.astro.build/en/guides/markdown-content/#syntax-highlighting)
 - [Lobe UI](https://github.com/lobehub/lobe-ui)
@@ -48,16 +48,15 @@ Projects that depend on Shikiji (sort alphabetically):
 - [Slidev](https://sli.dev/custom/highlighters.html#highlighters)
 - [VitePress](https://vitepress.dev/guide/markdown#syntax-highlighting-in-code-blocks)
 
-## Bundle Size
+## 捆绑包大小
 
-You can inspect the bundle size in detail on [pkg-size.dev/shikiji](https://pkg-size.dev/shikiji).
+您可以在 [pkg-size.dev/shikiji](https://pkg-size.dev/shikiji) 上查看详细捆绑包大小。
+截至 `v0.9.11` 2023 年 12 月 21 日：
 
-As of `v0.9.11`, measured at 21th, December 2023:
-
-| Bundle                | Size (minified) | Size (gzip) | Notes                                                            |
-| --------------------- | --------------: | ----------: | ---------------------------------------------------------------- |
-| `shikiji`             |          6.4 MB |      1.2 MB | All themes and languages as async chunks                         |
-| `shikiji/bundle/full` |          6.4 MB |      1.2 MB | Same as `shikiji`                                                |
-| `shikiji/bundle/web`  |          3.8 MB |      695 KB | All themes and common web languages as async chunks              |
-| `shikiji/core`        |          100 KB |       31 KB | Core engine without any themes or languages, compose on your own |
-| `shikiji/wasm`        |          623 KB |      231 KB | WASM binary inlined as base64 string                             |
+| 包                    | 体积 (压缩) | 体积 (gzip) | 说明                                   |
+| --------------------- | ----------: | ----------: | -------------------------------------- |
+| `shikiji`             |      6.4 MB |      1.2 MB | 所有主题和语言作为异步块               |
+| `shikiji/bundle/full` |      6.4 MB |      1.2 MB | 同上 `shikiji`                         |
+| `shikiji/bundle/web`  |      3.8 MB |      695 KB | 所有主题和常见的 Web 语言都作为异步块  |
+| `shikiji/core`        |      100 KB |       31 KB | 没有任何主题或语言的核心引擎，自行编写 |
+| `shikiji/wasm`        |      623 KB |      231 KB | WASM 二进制文件内联为 base64 字符串    |

@@ -37,7 +37,7 @@ const currentThemeType = computed(() => play.allThemes.find(i => i.id === play.t
         flex-none transition-opacity
       />
       <div op50 text-xs mx-2>
-        Playground
+        演练场
       </div>
       <button title="Randomize" hover="bg-gray/10" p1 rounded @click="play.randomize">
         <div i-carbon:shuffle op50 />
@@ -47,7 +47,7 @@ const currentThemeType = computed(() => play.allThemes.find(i => i.id === play.t
       <span v-html="play.output" />
       <textarea
         v-model="play.input"
-        font-mono bg-transparent absolute inset-0 z-100 py-20px px-24px
+        font-mono bg-transparent absolute inset-0 py-20px px-24px
         text-transparent caret-gray tab-4
         class="line-height-$vp-code-line-height font-$vp-font-family-mono text-size-$vp-code-font-size"
       />

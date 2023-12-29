@@ -2,13 +2,13 @@
 outline: deep
 ---
 
-# Light/Dark Dual Themes
+# 浅色/深色双主题
 
-Shikiji supports outputing light/dark dual themes. Different from [markdown-it-shiki](https://github.com/antfu/markdown-it-shiki#dark-mode)'s approach which renders the code twice, Shikiji's dual themes approach uses CSS variables to store the colors on each token. It's more performant with a smaller bundle size.
+Shikiji 支持输出浅色/深色双主题。与 [markdown-it-shiki](https://github.com/antfu/markdown-it-shiki#dark-mode) 的方法不同，它会将代码渲染两次，Shikiji 的双主题方法使用 CSS 变量来存储每个标记的颜色。它具有更好的性能和更小的包体积。
 
-Change the `theme` option in `codeToHtml` to `options` with `light` and `dark` keys to generate two themes.
+把 `codeToHtml` 中的 `theme` 配置项改为对象形式，并使用 `light` 和 `dark` 键来生成两个主题。
 
-```js
+```js {4}
 import { getHighlighter } from 'shikiji'
 
 const shiki = await getHighlighter({
@@ -19,13 +19,13 @@ const shiki = await getHighlighter({
 const code = shiki.codeToHtml('console.log("hello")', {
   lang: 'javascript',
   themes: {
-    light: 'vitesse-light',
+    light: 'min-light',
     dark: 'nord',
   }
 })
 ```
 
-The following HTML will be generated ([demo preview](https://htmlpreview.github.io/?https://raw.githubusercontent.com/antfu/shikiji/main/packages/shikiji/test/out/dual-themes.html)):
+下面的 HTML 将会被生成（[演示预览](https://htmlpreview.github.io/?https://raw.githubusercontent.com/antfu/shikiji/main/packages/shikiji/test/out/dual-themes.html)）：
 
 ```html
 <pre
@@ -48,9 +48,9 @@ The following HTML will be generated ([demo preview](https://htmlpreview.github.
 </pre>
 ```
 
-To make it reactive to your site's theme, you need to add a short CSS snippet:
+若要把您的网站主题变成响应式，您需要添加一段 CSS 代码：
 
-## Query-based Dark Mode
+## 基于媒体查询的深色模式
 
 ```css
 @media (prefers-color-scheme: dark) {
@@ -66,7 +66,7 @@ To make it reactive to your site's theme, you need to add a short CSS snippet:
 }
 ```
 
-## Class-based Dark Mode
+## 基于类名的深色模式
 
 ```css
 html.dark .shiki,
@@ -80,9 +80,9 @@ html.dark .shiki span {
 }
 ```
 
-## Multiple Themes
+## 多个主题
 
-It's also possible to support more than two themes. In the `themes` object, you can have an arbitrary number of themes, and specify the default theme with `defaultColor` option.
+它也支持多个主题。在 `themes` 对象中，您可以有任意数量的主题，并使用 `defaultColor` 选项指定默认主题。
 
 ```js
 const code = shiki.codeToHtml('console.log("hello")', {
@@ -100,21 +100,20 @@ const code = shiki.codeToHtml('console.log("hello")', {
 })
 ```
 
-A token would be generated like:
+token 会被生成为：
 
 ```html
 <span style="color:#1976D2;--shiki-dark:#D8DEE9;--shiki-dim:#566575">console</span>
 ```
 
-Then update your CSS snippet to control when each theme takes effect. Here is an example:
-
+然后更新您的 CSS 代码来控制每个主题的生效时机。下面是一个例子：
 [Demo preview](https://htmlpreview.github.io/?https://raw.githubusercontent.com/antfu/shikiji/main/packages/shikiji/test/out/multiple-themes.html)
 
-### Without Default Color
+### 不使用默认颜色
 
-If you want to take full control of the colors or avoid using `!important` to override, you can optionally disable the default color by setting `defaultColor` to `false`.
+如果您想完全控制颜色，或者避免使用 `!important` 来覆盖，您可以通过将 `defaultColor` 设置为 `false` 来禁用默认颜色。
 
-```js
+```js {7}
 const code = shiki.codeToHtml('console.log("hello")', {
   lang: 'javascript',
   themes: {
@@ -125,21 +124,21 @@ const code = shiki.codeToHtml('console.log("hello")', {
 })
 ```
 
-With it, a token would be generated like:
+这样，一个 token 将会被生成为：
 
 ```html
 <span style="--shiki-dark:#D8DEE9;--shiki-light:#2E3440">console</span>
 ```
 
-In that case, the generated HTML would have no style out of the box, you need to add your own CSS to control the colors.
+这个时候，生成的 HTML 将不会有任何样式，您需要添加自己的 CSS 代码来控制颜色。
 
-It's also possible to control the theme in CSS variables. For more, refer to the great research and examples by [@mayank99](https://github.com/mayank99) in [this issue #6](https://github.com/antfu/shikiji/issues/6).
+它也可以通过 CSS 变量来控制主题。更多内容，请参考 [@mayank99](https://github.com/mayank99) 在 [issue #6](https://github.com/antfu/shikiji/issues/6)。
 
-## Custom Language Aliases
+## 自定义语言别名
 
-You can register custom language aliases with `langAlias` option. For example:
+您可以通过 `langAlias` 选项来注册自定义语言别名。例如：
 
-```js
+```js {6,10}
 import { getHighlighter } from 'shikiji'
 
 const shiki = await getHighlighter({

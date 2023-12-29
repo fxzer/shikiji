@@ -2,17 +2,17 @@
 
 <Badges name="shikiji-monaco" />
 
-Use Shikiji to highlight [Monaco Editor](https://microsoft.github.io/monaco-editor/).
+[Monaco Editor](https://microsoft.github.io/monaco-editor/) 使用 Shikiji 高亮.
 
-Monaco's built-in highlighter does not use the full TextMate grammar, which in some cases is not accurate enough. This package allows you to use Shikiji's syntax highlighting engine to highlight Monaco, with shared grammars and themes from Shikiji.
+Monaco 内置的高亮器并没有使用完整的 TextMate 语法，这在某些情况下不够准确。这个包允许您使用 Shikiji 的语法高亮引擎来高亮 Monaco，使用 Shikiji 的共享语法和主题。
 
 ::: warning
-This package is experimental. Breaking changes may happend without following semver.
+这个包是实验性的，可能会有不兼容的改动。
 :::
 
-Heavily inspired by [`monaco-editor-textmate`](https://github.com/zikaari/monaco-editor-textmate).
+深受 [`monaco-editor-textmate`](https://github.com/zikaari/monaco-editor-textmate) 启发.
 
-## Install
+## 安装
 
 ```bash
 npm i -D shikiji-monaco
@@ -23,7 +23,7 @@ import { getHighlighter } from 'shikiji'
 import { shikijiToMonaco } from 'shikiji-monaco'
 import * as monaco from 'monaco-editor-core'
 
-// Create the highlighter, it can be reused
+// 创建高亮器后可被复用
 const highlighter = await getHighlighter({
   themes: [
     'vitesse-dark',
@@ -36,20 +36,20 @@ const highlighter = await getHighlighter({
   ],
 })
 
-// Register the languageIds first. Only registered languages will be highlighted.
+// 注册语言 ID，只有注册的语言才会被高亮
 monaco.languages.register({ id: 'vue' })
 monaco.languages.register({ id: 'typescript' })
 monaco.languages.register({ id: 'javascript' })
 
-// Register the themes from Shikiji, and provide syntax highlighting for Monaco. // [!code highlight:2]
+// 注册 Shikiji 的主题，并为 Monaco 提供语法高亮。// [!code highlight:2]
 shikijiToMonaco(highlighter, monaco)
 
-// Create the editor
+//  创建编辑器
 const editor = monaco.editor.create(document.getElementById('container'), {
   value: 'const a = 1',
   language: 'javascript',
   theme: 'vitesse-dark',
 })
 
-// ...As you use the editor normally
+// ...作为编辑器正常使用
 ```

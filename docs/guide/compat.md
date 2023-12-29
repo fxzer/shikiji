@@ -2,15 +2,15 @@
 outline: deep
 ---
 
-# Compatibility Build
+# 兼容性构建
 
-We took the chance of the rewrite to make some breaking changes that we think are beneficial for the future. We'd suggest you try to migrate those changes if possible, as most of them should be straightforward. If you have very deep integration, you can try our compatibility build which aligns better with `shiki`'s current API.
+我们利用重写的机会做了一些我们认为对未来有益的重大更改。我们建议您尝试尽可能迁移这些更改，因为它们中的大多数都应该很简单。如果您有非常深入的集成，可以尝试我们的兼容性构建，该构建与 `shiki` 的当前 API 更加一致。
 
-## Install `shikiji-compat`
+## 安装 `shikiji-compat`
 
 <Badges name="shikiji-compat" />
 
-Set the alias to `shiki` in your `package.json`:
+设置 `package.json` 中的 `shiki` 别名：
 
 ```json
 {
@@ -20,26 +20,26 @@ Set the alias to `shiki` in your `package.json`:
 }
 ```
 
-## Breaking Changes from Shiki
+## 与 Shiki 的 突破性变更
 
-As of [`shiki@0.14.3`](https://github.com/shikijs/shiki/releases/tag/v0.14.3), the breaking changes between Shiiki and Shikiji are:
+在 [`shiki@0.14.3`](https://github.com/shikijs/shiki/releases/tag/v0.14.3)，Shiiki 和 Shikiji 之间的中断性变更有：
 
-### Hard Breaking Changes
+### 硬性变更
 
-Breaking changes applied to both `shikiji` and `shikiji-compat`:
+变更应用于 `shikiji` 和 `shikiji-compat`：
 
-- CJS and IIFE builds are dropped. See [CJS Usage](#cjs-usage) and [CDN Usage](#cdn-usage) for more details.
-- `codeToHtml` uses [`hast`](https://github.com/syntax-tree/hast) internally. The generated HTML will be a bit different but should behave the same.
-- `css-variables` theme is not supported. Use the [dual themes](#lightdark-dual-themes) approach instead.
+- CJS 和 IIFE 版本将被删除。有关详细信息，请参阅 [CJS 用法](#cjs-usage) 和 [CDN 用法](#cdn-usage)。
+- `codeToHtml` 内部使用 [`hast`](https://github.com/syntax-tree/hast) 。生成的 HTML 会略有不同，但行为应该相同。
+- `css-variables` 主题不再支持， 请改用[双主题](#lightdark-dual-themes)。
 
-### Soft Breaking Changes
+### 软性变更
 
-Breaking changes applies to `shikiji`, but are shimmed by `shikiji-compat`:
+突破性变更适用于shikiji，并由 shikiji 补充：
 
-- Top-level named export `setCDN`, `loadLanguage`, `loadTheme`, `setWasm` are dropped as they are not needed anymore.
-- `BUNDLED_LANGUAGES`, `BUNDLED_THEMES` are moved to `shikiji/langs` and `shikiji/themes` and renamed to `bundledLanguages` and `bundledThemes` respectively.
-- `theme` option for `getHighlighter` is dropped, use `themes` with an array instead.
-- Highlighter does not maintain an internal default theme context. `theme` option is required for `codeToHtml` and `codeToThemedTokens`.
-- `.ansiToHtml` is merged into `.codeToHtml` as a special language `ansi`. Use `.codeToHtml(code, { lang: 'ansi' })` instead.
-- `lineOptions` is dropped in favor of the fully customizable `transforms` option.
-- `LanguageRegistration`'s `grammar` field is flattened to `LanguageRegistration` itself, refer to the types for more details.
+- 删除不再需要的顶级具名导出 `setCDN`, `loadLanguage`, `loadTheme`, `setWasm` .
+- `BUNDLED_LANGUAGES`、 `BUNDLED_THEMES` 分别移至 `shikiji/langs` 、 `shikiji/themes` ，并分别重命名为 `bundledLanguages` 、 `bundledThemes` 。
+- `getHighlighter`的 `theme` 选项被删除，改用数组的 `themes` 选项。
+- 高亮器不再维护内部默认主题上下文。 `theme` 选项的 `codeToHtml` 和 `codeToThemedTokens` 是必传的。
+- `.ansiToHtml` 作为特殊语言 `ansi` 合并到 `.codeToHtml` 。请改用 `.codeToHtml(code, { lang: 'ansi' })` 。
+- `lineOptions` 被删除，改用完全可自定义的 `transforms` 选项。
+- `LanguageRegistration` 的 `grammar` 字段被展开到 `LanguageRegistration` 本身，有关更多详细信息，请参阅类型。
