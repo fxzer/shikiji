@@ -11,6 +11,7 @@
     "build": "pnpm -r run build",
     "docs": "pnpm -C docs run docs:dev",
     "docs:build": "pnpm -C docs run docs:build",
+    "docs:preview": "pnpm -C docs run docs:preview",
     "eg": "pnpm -C examples run dev"
   },
   "devDependencies": {

@@ -40,6 +40,8 @@ const VERSIONS: DefaultTheme.NavItemWithLink[] = [
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  base: '/shikiji/',
+  outDir: './dist',
   title: 'Shikiji',
   description: 'A beautiful and powerful syntax highlighter',
   markdown: {
