@@ -22,7 +22,6 @@ import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import rehypeStringify from 'rehype-stringify'
 import rehypeShikiji from 'rehype-shikiji'
-import { expect, test } from 'vitest'
 
 const file = await unified()
   .use(remarkParse)
@@ -36,6 +35,46 @@ const file = await unified()
   })
   .use(rehypeStringify)
   .process(await fs.readFile('./input.md'))
+```
+
+## 细粒度的包
+
+默认情况下，会导入完整的 `shikiji` 包。如果您使用的是 Shikiji 的[细粒度包](/guide/install#fine-grained-bundle)，您可以从 `rehype-shikiji/core` 导入 `rehypeShikijiFromHighlighter` 并传入自己的高亮器：
+
+```ts
+import { unified } from 'unified'
+import remarkParse from 'remark-parse'
+import remarkRehype from 'remark-rehype'
+import rehypeStringify from 'rehype-stringify'
+import rehypeShikijiFromHighlighter from 'rehype-shikiji/core'
+
+import { fromHighlighter } from 'markdown-it-shikiji/core'
+import { getHighlighterCore } from 'shikiji/core'
+import { getWasmInlined } from 'shikiji/wasm'
+
+const highlighter = await getHighlighterCore({
+  themes: [
+    import('shikiji/themes/vitesse-light.mjs')
+  ],
+  langs: [
+    import('shikiji/langs/javascript.mjs'),
+  ],
+  loadWasm: getWasmInlined
+})
+
+const raw = await fs.readFile('./input.md')
+const file = await unified()
+  .use(remarkParse)
+  .use(remarkRehype)
+  .use(rehypeShikijiFromHighlighter, highlighter, {
+    // or `theme` for a single theme
+    themes: {
+      light: 'vitesse-light',
+      dark: 'vitesse-dark',
+    }
+  })
+  .use(rehypeStringify)
+  .processSync(raw) // it's also possible to process synchronously
 ```
 
 ## 特性

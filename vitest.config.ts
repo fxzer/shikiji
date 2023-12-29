@@ -23,7 +23,10 @@ export default defineConfig({
     },
   },
   test: {
-    exclude: ['**/vendor/**', '**/node_modules/**'],
+    exclude: [
+      '**/vendor/**',
+      '**/node_modules/**',
+    ],
     server: {
       deps: {
         inline: [
@@ -44,6 +47,7 @@ export default defineConfig({
         '**/scripts/**',
         '**/vendor/**',
         '**/stack-element-metadata.ts',
+        '**/shikiji-cli/**',
         '**/shikiji-monaco/**',
       ],
     },

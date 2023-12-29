@@ -1,35 +1,44 @@
 {
-  "name": "shikiji-compat",
+  "name": "shikiji-cli",
   "type": "module",
   "version": "0.9.14",
-  "description": "Shikiji with shiki compatible API",
+  "description": "Shikiji in the command line",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
   "homepage": "https://github.com/antfu/shikiji#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/antfu/shikiji.git",
-    "directory": "packages/shikiji-compat"
+    "directory": "packages/shikiji-cli"
   },
   "bugs": "https://github.com/antfu/shikiji/issues",
   "keywords": [
     "shiki",
-    "rehype"
+    "shikiji",
+    "cli"
   ],
   "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",
-      "require": "./index.cjs",
       "default": "./dist/index.mjs"
+    },
+    "./cli": {
+      "types": "./dist/cli.d.mts",
+      "default": "./dist/cli.mjs"
     }
   },
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
+  "bin": {
+    "shikiji": "bin.mjs",
+    "shikiji-cli": "bin.mjs",
+    "skat": "bin.mjs"
+  },
   "files": [
-    "dist",
-    "index.cjs"
+    "bin.mjs",
+    "dist"
   ],
   "scripts": {
     "build": "unbuild",
@@ -37,7 +46,11 @@
     "prepublishOnly": "nr build"
   },
   "dependencies": {
-    "shikiji": "workspace:*",
-    "shikiji-transformers": "workspace:*"
+    "chalk": "^5.3.0",
+    "minimist": "^1.2.8",
+    "shikiji": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/minimist": "^1.2.5"
   }
 }
