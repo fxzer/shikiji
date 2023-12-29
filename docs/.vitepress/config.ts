@@ -211,7 +211,7 @@ export default defineConfig({
 
   head: [
     ['meta', { name: 'theme-color', content: '#ffffff' }],
-    ['link', { rel: 'icon', href: '/logo.svg', type: 'image/svg+xml' }],
+    ['link', { rel: 'icon', href: '/shikiji/logo.svg', type: 'image/svg+xml' }],
     ['meta', { name: 'author', content: 'Pine Wu, Anthony Fu' }],
     ['meta', { property: 'og:title', content: 'Shikiji' }],
     ['meta', { property: 'og:image', content: 'https://shikiji.netlify.app/og.png' }],

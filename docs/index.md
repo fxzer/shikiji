@@ -4,7 +4,7 @@ layout: home
 hero:
   name: "式辞 Shikiji"
   text: "语法高亮器"
-  tagline: 一个美丽而强大的语法高亮器
+  tagline: 一个美观且强大的语法高亮器
   image:
     src: /logo.svg
     alt: Shikiji Logo
