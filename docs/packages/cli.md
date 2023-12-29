@@ -2,7 +2,7 @@
 
 <Badges name="shikiji-cli" />
 
-在命令行中使用 Shibiki。
+在命令行中使用 Shikiji。
 
 ## 用法
 

@@ -4,13 +4,13 @@
 
 Shikiji 插件 [Markdown It](https://markdown-it.github.io/)。
 
-## Install
+## 安装
 
 ```bash
 npm i -D markdown-it-shikiji
 ```
 
-## Usage
+## 用法
 
 ```ts
 import MarkdownIt from 'markdown-it'
