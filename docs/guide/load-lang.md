@@ -4,7 +4,8 @@
 
 您可以通过将 TextMate 语法对象传递到 `langs`数组中来加载自定义语言。
 
-```ts
+```ts twoslash
+// @noErrors
 import { getHighlighter } from 'shikiji'
 
 const myLang = JSON.parse(fs.readFileSync('my-lang.json', 'utf8'))
@@ -20,7 +21,8 @@ const html = highlighter.codeToHtml(code, {
 
 您也可以在创建高亮器后加载语言。
 
-```ts {7}
+```ts {7} twoslash
+// @noErrors
 import { getHighlighter } from 'shikiji'
 
 const myLang = JSON.parse(fs.readFileSync('my-lang.json', 'utf8'))

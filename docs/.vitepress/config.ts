@@ -14,6 +14,7 @@ const GUIDES: DefaultTheme.NavItemWithLink[] = [
   { text: '双主题', link: '/guide/dual-themes' },
   { text: '转换器', link: '/guide/transformers' },
   { text: '兼容性构建', link: '/guide/compat' },
+  { text: '主题色', link: '/guide/theme-colors' },
   { text: '自定义主题', link: '/guide/load-theme' },
   { text: '自定义语言', link: '/guide/load-lang' },
 ]

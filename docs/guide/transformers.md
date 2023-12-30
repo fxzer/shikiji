@@ -35,7 +35,7 @@ const code = await codeToHtml('foo\bar', {
 您也可以使用 `codeToHast` 得到中间的 `hast` 树，而不是将它们序列化为 HTML。您还可以进一步将 ast 集成到 [unified](https://github.com/unifiedjs) 生态系统中。
 
 ```js
-const root = shiki.codeToHast(
+const root = highlighter.codeToHast(
   'const a = 1',
   { lang: 'javascript', theme: 'nord' }
 )

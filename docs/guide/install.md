@@ -72,7 +72,7 @@ await highlighter.loadLanguage('javascript') // load the language
 
 如果您想加载所有主题和语言（不推荐），您可以遍历`bundledLanguages` and `bundledThemes`的所有的键。
 
-```ts
+```ts twoslash theme:poimandres
 import { bundledLanguages, bundledThemes, getHighlighter } from 'shikiji'
 
 const highlighter = await getHighlighter({
@@ -80,7 +80,10 @@ const highlighter = await getHighlighter({
   langs: Object.keys(bundledLanguages),
 })
 
-highlighter.codeToHtml('const a = 1', { lang: 'javascript' })
+highlighter.codeToHtml('const a = 1', {
+  lang: 'javascript',
+  theme: 'poimandres'
+})
 ```
 
 或者您可以尝试 [简写形式](/guide/shorthands) 异步按需加载主题/语言。
@@ -89,8 +92,9 @@ highlighter.codeToHtml('const a = 1', { lang: 'javascript' })
 
 当导入 `shikiji` 时，所有的主题和语言都作为异步块捆绑。通常，如果您不使用它们，它们就不会被加载，这对您来说不是一个问题。在某些情况下，如果您想控制捆绑什么，您可以使用核心并组合自己的捆绑包。
 
-```js theme:material-theme-ocean
-// `shikiji/core` 入口不包含任何主题或语言或 wasm 二进制文件。
+```ts twoslash theme:material-theme-ocean
+// @noErrors
+// `shikiji/core` entry does not include any themes or languages or the wasm binary.
 import { getHighlighterCore } from 'shikiji/core'
 
 // `shikiji/wasm` 包含作为 base64 字符串内联的 wasm 二进制文件。
@@ -99,7 +103,7 @@ import { getWasmInlined } from 'shikiji/wasm'
 // 直接导入主题和语言模块，只有您导入的模块才会被捆绑。
 import nord from 'shikiji/themes/nord.mjs'
 
-const shiki = await getHighlighterCore({
+const highlighter = await getHighlighterCore({
   themes: [
     // 用已导入的模块代替字符串
     nord,
@@ -117,9 +121,9 @@ const shiki = await getHighlighterCore({
 })
 
 // 可选择在创建后加载主题和语言
-await shiki.loadTheme(import('shikiji/themes/vitesse-light.mjs'))
+await highlighter.loadTheme(import('shikiji/themes/vitesse-light.mjs'))
 
-const code = shiki.codeToHtml('const a = 1', {
+const code = highlighter.codeToHtml('const a = 1', {
   lang: 'javascript',
   theme: 'material-theme-ocean'
 })
@@ -135,33 +139,39 @@ const code = shiki.codeToHtml('const a = 1', {
 
 例如，以下 ESM 代码：
 
-```js
+```ts twoslash
 // ESM
 import { getHighlighter } from 'shikiji'
 
 async function main() {
-  const shiki = await getHighlighter({
+  const highlighter = await getHighlighter({
     themes: ['vitesse-dark'],
     langs: ['javascript'],
   })
 
-  const code = shiki.codeToHtml('const a = 1', { lang: 'javascript' })
+  const code = highlighter.codeToHtml('const a = 1', {
+    theme: 'vitesse-dark',
+    lang: 'javascript',
+  })
 }
 ```
 
 可以在 CJS 中编写为：
 
-```js
+```ts twoslash
 // CJS
 async function main() {
   const { getHighlighter } = await import('shikiji')
 
-  const shiki = await getHighlighter({
+  const highlighter = await getHighlighter({
     themes: ['vitesse-dark'],
     langs: ['javascript'],
   })
 
-  const code = shiki.codeToHtml('const a = 1', { lang: 'javascript' })
+  const code = highlighter.codeToHtml('const a = 1', {
+    theme: 'vitesse-dark',
+    lang: 'javascript'
+  })
 }
 ```
 
@@ -197,7 +207,8 @@ Cloudflare Workers [不支持从二进制数据初始化 WebAssembly](https://co
 
 同时，建议使用 [细粒度捆绑](#fine-grained-bundle) 方法来减少捆绑包大小。
 
-```ts theme:nord
+```ts twoslash theme:nord
+// @noErrors
 import { getHighlighterCore, loadWasm } from 'shikiji/core'
 import nord from 'shikiji/themes/nord.mjs'
 import js from 'shikiji/langs/javascript.mjs'
@@ -215,7 +226,10 @@ export default {
       langs: [js],
     })
 
-    return new Response(highlighter.codeToHtml('console.log(\'shiki\');', { lang: 'js' }))
+    return new Response(highlighter.codeToHtml('console.log(\'shiki\');', {
+      theme: 'nord',
+      lang: 'js'
+    }))
   },
 }
 ```

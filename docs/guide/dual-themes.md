@@ -11,12 +11,12 @@ Shikiji 支持输出浅色/深色双主题。与 [markdown-it-shiki](https://git
 ```js {4}
 import { getHighlighter } from 'shikiji'
 
-const shiki = await getHighlighter({
+const highlighter = await getHighlighter({
   themes: ['nord', 'min-light'],
   langs: ['javascript'],
 })
 
-const code = shiki.codeToHtml('console.log("hello")', {
+const code = highlighter.codeToHtml('console.log("hello")', {
   lang: 'javascript',
   themes: {
     light: 'min-light',
@@ -85,7 +85,7 @@ html.dark .shiki span {
 它也支持多个主题。在 `themes` 对象中，您可以有任意数量的主题，并使用 `defaultColor` 选项指定默认主题。
 
 ```js
-const code = shiki.codeToHtml('console.log("hello")', {
+const code = highlighter.codeToHtml('console.log("hello")', {
   lang: 'javascript',
   themes: {
     light: 'github-light',
@@ -141,12 +141,12 @@ const code = shiki.codeToHtml('console.log("hello")', {
 ```js {6,10}
 import { getHighlighter } from 'shikiji'
 
-const shiki = await getHighlighter({
+const highlighter = await getHighlighter({
   langs: ['javascript'],
   langAlias: {
     mylang: 'javascript',
   },
 })
 
-const code = shiki.codeToHtml('const a = 1', { lang: 'mylang' })
+const code = highlighter.codeToHtml('const a = 1', { lang: 'mylang' })
 ```
