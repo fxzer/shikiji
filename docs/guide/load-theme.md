@@ -50,4 +50,4 @@ const html = highlighter.codeToHtml(code, {
 })
 ```
 
-# 主题必须是一个 TextMate 语法 JSON 主题对象。例如，[它应该看起来像这样](https://github.com/antfu/vscode-theme-vitesse/blob/main/themes/vitesse-dark.json)。
+主题必须是一个 TextMate 语法 JSON 主题对象。例如，[它应该看起来像这样](https://github.com/antfu/vscode-theme-vitesse/blob/main/themes/vitesse-dark.json)。
