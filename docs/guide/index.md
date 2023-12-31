@@ -34,7 +34,7 @@ Shikiji 是基于 [Shiki](https://github.com/shikijs/shiki) 用 ESM 语法重写
 
 这里有一个小游乐场，供您尝试 Shikiji 如何高亮展示您的代码。与在生成时运行的其他代码块不同，此 演练场在浏览器的客户端呈现。主题和语言是按需加载的。
 
-<ShikijiMiniPlayground />
+<MiniPlayground />
 
 [安装 Shikiji](/guide/install) 在您的项目中使用它。
 

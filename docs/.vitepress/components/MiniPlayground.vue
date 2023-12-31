@@ -24,7 +24,7 @@ function isActive(id: string, value: string) {
     <!-- 主题和语言筛选 -->
     <div
       class="aside   bg-white/10 "
-      absolute top-10 z-10 flex backdrop-blur-4 shadow-lg transition-all duration-200
+      absolute top-10 z-10 flex backdrop-blur-sm shadow-lg transition-all duration-200
       style="height: calc(100% - 40px);" :class="isFold ? '-translate-x-full' : 'translate-x-0'"
     >
       <div h-full>
@@ -86,13 +86,11 @@ function isActive(id: string, value: string) {
     </header>
 
     <!-- 输入和输出展示 -->
-    <div grid="~ md:cols-2">
+    <div grid="~ md:cols-2" style="height: calc(100% - 40px);">
       <Codemirror
         v-model:value="play.input"
-        h-full
         lt-md="border-0 border-b-1  border-solid border-gray/40"
         bg-transparent
-        placeholder="test placeholder"
       />
       <div class="output" border="0 l-1 solid gray/20" min-h-150 h-full v-html="play.output" />
     </div>
