@@ -17,15 +17,10 @@ function getThemesByType(type: 'light' | 'dark') {
 function isActive(id: string, value: string) {
   return id === value ? 'text-green font-semibold' : ''
 }
-
-function handleInput(e: Event) {
-  const target = e.target as HTMLTextAreaElement
-  play.input = target.value
-}
 </script>
 
 <template>
-  <div class="mini-playground" my-5 relative of-hidden :class="currentThemeType" group :style="[play.preStyle]">
+  <div class="mini-playground" my-5 relative of-hidden rounded-lg :class="currentThemeType" group :style="[play.preStyle]">
     <!-- 主题和语言筛选 -->
     <div
       class="aside   bg-white/10 "
@@ -92,7 +87,10 @@ function handleInput(e: Event) {
 
     <!-- 输入和输出展示 -->
     <div grid="~ md:cols-2" style="height: calc(100% - 40px);">
-      <textarea bg-transparent of-auto p-3 @input="handleInput" v-html="play.input" />
+      <CodeMirror
+        v-model="play.input"
+        class="scrolls border-(l gray-400/20)"
+      />
       <div class="output" border="0 l-1 solid gray/20" min-h-150 text-sm h-full v-html="play.output" />
     </div>
   </div>
@@ -122,6 +120,6 @@ function handleInput(e: Event) {
 
 <style scoped>
 .mini-playground {
-  box-shadow: 0 0 3px #ddd;
+  box-shadow: 0 0 3px #dddddd8a;
 }
 </style>

@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Badges: typeof import('./.vitepress/components/Badges.vue')['default']
+    CodeMirror: typeof import('./.vitepress/components/CodeMirror.vue')['default']
     HomeDemo: typeof import('./.vitepress/components/HomeDemo.vue')['default']
     LanguagesList: typeof import('./.vitepress/components/LanguagesList.vue')['default']
     MiniPlayground: typeof import('./.vitepress/components/MiniPlayground.vue')['default']
