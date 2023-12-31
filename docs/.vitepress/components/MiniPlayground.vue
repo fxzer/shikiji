@@ -25,7 +25,7 @@ function handleInput(e: Event) {
 </script>
 
 <template>
-  <div class="mini-playground" my-5 relative of-hidden :class="currentThemeType" :style="[play.preStyle]">
+  <div class="mini-playground" my-5 relative of-hidden :class="currentThemeType" group :style="[play.preStyle]">
     <!-- 主题和语言筛选 -->
     <div
       class="aside   bg-white/10 "
@@ -71,7 +71,7 @@ function handleInput(e: Event) {
     </div>
 
     <header px-3 h-10 flex items-center justify-between border="0 b-1 solid gray/20">
-      <span text-gray dark:text-white mr-3 cursor-pointer @click="toggleShow">
+      <span text-gray mr-3 cursor-pointer @click="toggleShow">
         <i v-if="isFold" i-line-md-menu-fold-right inline-block />
         <i v-else i-line-md-menu-fold-left inline-block />
       </span>
