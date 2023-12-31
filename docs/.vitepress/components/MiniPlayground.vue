@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import { computed, ref } from 'vue'
-import Codemirror from 'codemirror-editor-vue3'
+
 import { usePlayground } from '../store/playground'
 
 const play = usePlayground()
@@ -16,6 +16,11 @@ function getThemesByType(type: 'light' | 'dark') {
 
 function isActive(id: string, value: string) {
   return id === value ? 'text-green font-semibold' : ''
+}
+
+function handleInput(e: Event) {
+  const target = e.target as HTMLTextAreaElement
+  play.input = target.value
 }
 </script>
 
@@ -87,12 +92,8 @@ function isActive(id: string, value: string) {
 
     <!-- 输入和输出展示 -->
     <div grid="~ md:cols-2" style="height: calc(100% - 40px);">
-      <Codemirror
-        v-model:value="play.input"
-        lt-md="border-0 border-b-1  border-solid border-gray/40"
-        bg-transparent
-      />
-      <div class="output" border="0 l-1 solid gray/20" min-h-150 h-full v-html="play.output" />
+      <textarea bg-transparent of-auto p-3 @input="handleInput" v-html="play.input" />
+      <div class="output" border="0 l-1 solid gray/20" min-h-150 text-sm h-full v-html="play.output" />
     </div>
   </div>
 </template>
@@ -104,33 +105,23 @@ function isActive(id: string, value: string) {
   margin: 0 !important;
   padding: 10px !important;
 }
-.mini-playground.dark .CodeMirror {
-  color: inherit !important;
+.mini-playground ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
-.mini-playground .cm-s-default {
-  background: transparent !important;
-  font-size: 16px !important;
+
+.mini-playground ::-webkit-scrollbar-thumb:vertical {
+  background-color: #cccccc5b;
+  border-radius: 6px;
 }
-.codemirror-container:not(.original-style) .CodeMirror .CodeMirror-line {
-  font-family: var(--vp-font-family-mono) !important;
-}
-.mini-playground .CodeMirror-gutters {
-  background: transparent !important;
-  border-color: #cccccc50;
+.mini-playground ::-webkit-scrollbar-thumb:horizontal {
+  background-color: #cccccc5b;
+  border-radius: 6px;
 }
 </style>
 
 <style scoped>
 .mini-playground {
   box-shadow: 0 0 3px #ddd;
-}
-.aside ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-
-.aside ::-webkit-scrollbar-thumb:vertical {
-  background-color: #cccccc5b;
-  border-radius: 6px;
 }
 </style>
