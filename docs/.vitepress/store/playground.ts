@@ -36,6 +36,8 @@ export const usePlayground = defineStore('playground', () => {
   const isLoading = ref(true)
 
   function randomize() {
+    langFilter.value = ''
+    themeFilter.value = ''
     if (allLanguages.value.length && allThemes.value.length) {
       lang.value = allLanguages.value[Math.floor(Math.random() * allLanguages.value.length)].id as any
       theme.value = allThemes.value[Math.floor(Math.random() * allThemes.value.length)].id as any

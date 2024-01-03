@@ -12,6 +12,7 @@ declare module 'vue' {
     HomeDemo: typeof import('./.vitepress/components/HomeDemo.vue')['default']
     LanguagesList: typeof import('./.vitepress/components/LanguagesList.vue')['default']
     MiniPlayground: typeof import('./.vitepress/components/MiniPlayground.vue')['default']
+    Selector: typeof import('./.vitepress/components/Selector.vue')['default']
     ShikijiMiniPlayground: typeof import('./.vitepress/components/ShikijiMiniPlayground.vue')['default']
     ShikijiPlayground: typeof import('./.vitepress/components/ShikijiPlayground.vue')['default']
     ThemesList: typeof import('./.vitepress/components/ThemesList.vue')['default']

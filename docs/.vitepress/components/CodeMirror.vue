@@ -48,9 +48,6 @@ onMounted(async () => {
 .cm-content {
   padding: 10px !important;
 }
-.scrolls {
-  overflow: auto !important;
-}
 .mini-playground.dark .cm-line {
   caret-color: #ccc !important;
 }

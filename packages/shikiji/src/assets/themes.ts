@@ -19,7 +19,7 @@ export const bundledThemesInfo: BundledThemeInfo[] = [
   {
     "id": "catppuccin-latte",
     "displayName": "Catppuccin Latte",
-    "type": "light",
+    "type": "dark",
     "import": (() => import('./themes/catppuccin-latte')) as unknown as DynamicImportThemeRegistration
   },
   {

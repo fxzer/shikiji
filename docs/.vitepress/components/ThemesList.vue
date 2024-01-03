@@ -44,7 +44,7 @@ watch(showModel, (v) => {
     </table>
     <div v-if="showModel" fixed inset-0 z-100 flex items-center justify-center>
       <div bg-black:50 absolute inset-0 backdrop-blur-sm @click="showModel = false" />
-      <MiniPlayground h-full w-90vw lg:w-60vw lg:h-80vh />
+      <MiniPlayground h-90vh w-90vw lg:w-60vw lg:h-80vh />
     </div>
   </div>
 </template>
