@@ -44,6 +44,7 @@ export default defineConfig({
   base: '/shikiji/',
   outDir: './dist',
   title: 'Shikiji',
+  titleTemplate: 'Shikiji 中文文档',
   description: 'A beautiful and powerful syntax highlighter',
   markdown: {
     theme: {
