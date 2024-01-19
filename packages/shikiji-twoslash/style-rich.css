@@ -3,6 +3,8 @@
   --twoslash-border-color: #8888;
   --twoslash-jsdoc-color: #888;
   --twoslash-underline-color: currentColor;
+  --twoslash-highlighted-border: #c37d0d50;
+  --twoslash-highlighted-bg: #c37d0d20;
   --twoslash-popup-bg: #f8f8f8;
   --twoslash-popup-shadow: rgba(0, 0, 0, 0.08) 0px 1px 4px;
   --twoslash-matched-color: inherit;
@@ -37,16 +39,16 @@
   position: relative;
 }
 
-.twoslash .twoslash-popup-info {
+.twoslash .twoslash-popup-container {
   position: absolute;
   opacity: 0;
-  display: inline-block;
+  display: inline-flex;
+  flex-direction: column;
   transform: translateY(1.1em);
   background: var(--twoslash-popup-bg);
   border: 1px solid var(--twoslash-border-color);
   transition: opacity 0.3s;
   border-radius: 4px;
-  padding: 4px 6px;
   pointer-events: none;
   z-index: 10;
   user-select: none;
@@ -54,18 +56,18 @@
   box-shadow: var(--twoslash-popup-shadow);
 }
 
-.twoslash .twoslash-query-presisted .twoslash-popup-info {
+.twoslash .twoslash-query-presisted .twoslash-popup-container {
   z-index: 9;
   transform: translateY(1.5em);
 }
 
-.twoslash .twoslash-hover:hover .twoslash-popup-info,
-.twoslash .twoslash-query-presisted .twoslash-popup-info {
+.twoslash .twoslash-hover:hover .twoslash-popup-container,
+.twoslash .twoslash-query-presisted .twoslash-popup-container {
   opacity: 1;
   pointer-events: auto;
 }
 
-.twoslash .twoslash-popup-info:hover {
+.twoslash .twoslash-popup-container:hover {
   user-select: auto;
 }
 
@@ -82,12 +84,26 @@
   pointer-events: none;
 }
 
-.twoslash .twoslash-popup-jsdoc {
+.twoslash .twoslash-popup-code,
+.twoslash .twoslash-popup-docs {
+  padding: 6px 8px !important;
+}
+
+.twoslash .twoslash-popup-docs {
   color: var(--twoslash-jsdoc-color);
-  padding-top: 6px;
-  padding-bottom: 2px;
   font-family: sans-serif;
   font-size: 0.8em;
+  border-top: 1px solid var(--twoslash-border-color);
+}
+
+.twoslash .twoslash-popup-docs-tags {
+  display: flex;
+  flex-direction: column;
+}
+
+.twoslash .twoslash-popup-docs-tags,
+.twoslash .twoslash-popup-docs-tag-name {
+  margin-right: 0.5em;
 }
 
 /* ===== Error Line ===== */
@@ -107,33 +123,34 @@
 }
 
 /* ===== Completeions ===== */
-.twoslash .twoslash-completions-list {
+.twoslash .twoslash-completion-cursor {
   position: relative;
 }
-
-.twoslash .twoslash-completions-list ul {
+.twoslash .twoslash-completion-cursor .twoslash-completion-list {
   user-select: none;
   position: absolute;
   top: 0;
   left: 0;
   transform: translate(0, 1.2em);
+  margin: 3px 0 0 -1px;
   display: inline-block;
-  width: 240px;
+  z-index: 8;
+  box-shadow: var(--twoslash-popup-shadow);
   background: var(--twoslash-popup-bg);
   border: 1px solid var(--twoslash-border-color);
+}
+.twoslash-completion-list {
+  width: 240px;
   font-size: 0.8rem;
-  margin: 3px 0 0 -1px;
   padding: 4px;
-  z-index: 8;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  box-shadow: var(--twoslash-popup-shadow);
 }
-.twoslash .twoslash-completions-list ul:hover {
+.twoslash-completion-list:hover {
   user-select: auto;
 }
-.twoslash .twoslash-completions-list ul::before {
+.twoslash-completion-list::before {
   background-color: var(--twoslash-cursor-color);
   width: 2px;
   position: absolute;
@@ -142,25 +159,33 @@
   left: -1px;
   content: ' ';
 }
-.twoslash .twoslash-completions-list ul li {
+.twoslash-completion-list li {
   overflow: hidden;
   display: flex;
   align-items: center;
   gap: 0.25em;
   line-height: 1em;
 }
-.twoslash .twoslash-completions-list ul li span.twoslash-completions-unmatched {
+.twoslash-completion-list li span.twoslash-completions-unmatched {
   color: var(--twoslash-unmatched-color);
 }
-.twoslash .twoslash-completions-list ul .deprecated {
+.twoslash-completion-list .deprecated {
   text-decoration: line-through;
   opacity: 0.5;
 }
-.twoslash .twoslash-completions-list ul li span.twoslash-completions-matched {
+.twoslash-completion-list li span.twoslash-completions-matched {
   color: var(--twoslash-matched-color);
 }
+/* Highlights */
+.twoslash-highlighted {
+  background-color: var(--twoslash-highlighted-bg);
+  border: 1px solid var(--twoslash-highlighted-border);
+  padding: 1px 2px;
+  margin: -1px -3px;
+  border-radius: 4px;
+}
 /* Icons */
-.twoslash .twoslash-completions-list .twoslash-completions-icon {
+.twoslash-completion-list .twoslash-completions-icon {
   color: var(--twoslash-unmatched-color);
   width: 1em;
   flex: none;
@@ -171,7 +196,7 @@
   background-color: var(--twoslash-tag-bg);
   border-left: 3px solid var(--twoslash-tag-color);
   color: var(--twoslash-tag-color);
-  padding: 6px 6px;
+  padding: 6px 10px;
   margin: 0.2em 0;
   display: flex;
   align-items: center;

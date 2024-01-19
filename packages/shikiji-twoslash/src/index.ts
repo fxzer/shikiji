@@ -1,6 +1,12 @@
-import { twoslasher } from '@typescript/twoslash'
-import { createTransformerFactory } from './core'
+import { createTwoslasher } from 'twoslash'
+import { createTransformerFactory, rendererRich } from './core'
 
 export * from './core'
 
-export const transformerTwoSlash = createTransformerFactory(twoslasher)
+/**
+ * Factory function to create a Shikiji transformer for twoslash integrations.
+ */
+export const transformerTwoslash = /* @__PURE__ */ createTransformerFactory(
+  /* @__PURE__ */ createTwoslasher(),
+  /* @__PURE__ */ rendererRich(),
+)

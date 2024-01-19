@@ -10,6 +10,8 @@
 一个由 ESM 重写的 [shiki](https://github.com/shikijs/shiki)基于 TextMate 语法的美观的语法高亮器，具有更多功能和能力。
 [📚 **文档**](https://shikiji.netlify.app)
 
-## 证书
+[📚 **Documentation**](https://shikiji.netlify.app)
+
+## License
 
 [MIT](./LICENSE)

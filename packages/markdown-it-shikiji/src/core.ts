@@ -1,13 +1,13 @@
 import type MarkdownIt from 'markdown-it'
-import { addClassToHast } from 'shikiji/core'
 import type { BuiltinTheme, CodeOptionsMeta, CodeOptionsThemes, CodeToHastOptions, HighlighterGeneric, ShikijiTransformer, TransformerOptions } from 'shikiji'
-import { parseHighlightLines } from '../../shared/line-highlight'
+import { transformerMetaHighlight } from 'shikiji-transformers'
 
 export interface MarkdownItShikijiExtraOptions {
   /**
    * Add `highlighted` class to lines defined in after codeblock
    *
-   * @default true
+   * @deprecated Use [transformerNotationHighlight](https://shikiji.netlify.app/packages/transformers#transformernotationhighlight) instead
+   * @default false
    */
   highlightLines?: boolean | string
 
@@ -34,7 +34,7 @@ export function setupMarkdownIt(
   options: MarkdownItShikijiSetupOptions,
 ) {
   const {
-    highlightLines = true,
+    highlightLines = false,
     parseMetaString,
   } = options
 
@@ -53,21 +53,13 @@ export function setupMarkdownIt(
     const builtInTransformer: ShikijiTransformer[] = []
 
     if (highlightLines) {
-      const lines = parseHighlightLines(attrs)
-      if (lines) {
-        const className = highlightLines === true
-          ? 'highlighted'
-          : highlightLines
-
-        builtInTransformer.push({
-          name: 'markdown-it-shikiji:line-class',
-          line(node, line) {
-            if (lines.includes(line))
-              addClassToHast(node, className)
-            return node
-          },
-        })
-      }
+      builtInTransformer.push(
+        transformerMetaHighlight({
+          className: highlightLines === true
+            ? 'highlighted'
+            : highlightLines,
+        }),
+      )
     }
 
     builtInTransformer.push({

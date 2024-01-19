@@ -13,6 +13,7 @@ import fg from 'fast-glob'
 const entries = [
   'src/index.ts',
   'src/core.ts',
+  'src/core-unwasm.ts',
   'src/types.ts',
   'src/themes.ts',
   'src/langs.ts',
@@ -24,8 +25,9 @@ const entries = [
 
 const external = [
   'shikiji-core',
-  'shikiji-core/wasm',
+  'shikiji-core/wasm-inlined',
   'shikiji-core/types',
+  'shikiji/wasm',
 ]
 
 const plugins = [

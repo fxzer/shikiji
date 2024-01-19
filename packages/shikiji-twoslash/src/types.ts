@@ -1,14 +1,14 @@
-import type { TwoSlashOptions, TwoSlashReturn, twoslasher } from '@typescript/twoslash'
+import type { NodeCompletion, NodeError, NodeHighlight, NodeHover, NodeQuery, NodeTag, TwoslashOptions, TwoslashReturn, twoslasher } from 'twoslash'
 import type { CodeToHastOptions, ShikijiTransformerContext } from 'shikiji-core'
 import type { Element, ElementContent, Text } from 'hast'
 
 declare module 'shikiji-core' {
   interface ShikijiTransformerContextMeta {
-    twoslash?: TwoSlashReturn
+    twoslash?: TwoslashReturn
   }
 }
 
-export interface TransformerTwoSlashOptions {
+export interface TransformerTwoslashOptions {
   /**
    * Languages to apply this transformer to
    */
@@ -35,11 +35,11 @@ export interface TransformerTwoSlashOptions {
   /**
    * Options to pass to twoslash
    */
-  twoslashOptions?: TwoSlashOptions
+  twoslashOptions?: TwoslashOptions
   /**
    * Custom renderers to decide how each info should be rendered
    */
-  renderer?: TwoSlashRenderers
+  renderer?: TwoslashRenderer
   /**
    * Strictly throw when there is an error
    * @default true
@@ -47,14 +47,16 @@ export interface TransformerTwoSlashOptions {
   throws?: boolean
 }
 
-export interface TwoSlashRenderers {
-  lineError?(this: ShikijiTransformerContext, error: TwoSlashReturn['errors'][0]): ElementContent[]
-  lineCustomTag?(this: ShikijiTransformerContext, tag: TwoSlashReturn['tags'][0]): ElementContent[]
-  lineQuery?(this: ShikijiTransformerContext, query: TwoSlashReturn['queries'][0], targetNode?: Element | Text): ElementContent[]
-  lineCompletions?(this: ShikijiTransformerContext, query: TwoSlashReturn['queries'][0]): ElementContent[]
+export interface TwoslashRenderer {
+  lineError?(this: ShikijiTransformerContext, error: NodeError): ElementContent[]
+  lineCustomTag?(this: ShikijiTransformerContext, tag: NodeTag): ElementContent[]
+  lineQuery?(this: ShikijiTransformerContext, query: NodeQuery, targetNode?: Element | Text): ElementContent[]
+  lineCompletion?(this: ShikijiTransformerContext, query: NodeCompletion): ElementContent[]
 
-  nodeError?(this: ShikijiTransformerContext, error: TwoSlashReturn['errors'][0], node: Element | Text): Partial<ElementContent>
-  nodeStaticInfo(this: ShikijiTransformerContext, info: TwoSlashReturn['staticQuickInfos'][0], node: Element | Text): Partial<ElementContent>
-  nodeQuery?(this: ShikijiTransformerContext, query: TwoSlashReturn['queries'][0], node: Element | Text): Partial<ElementContent>
-  nodeCompletions?(this: ShikijiTransformerContext, query: TwoSlashReturn['queries'][0], node: Element | Text): Partial<ElementContent>
+  nodeStaticInfo(this: ShikijiTransformerContext, info: NodeHover, node: Element | Text): Partial<ElementContent>
+  nodeError?(this: ShikijiTransformerContext, error: NodeError, node: Element | Text): Partial<ElementContent>
+  nodeQuery?(this: ShikijiTransformerContext, query: NodeQuery, node: Element | Text): Partial<ElementContent>
+  nodeCompletion?(this: ShikijiTransformerContext, query: NodeCompletion, node: Element | Text): Partial<ElementContent>
+
+  nodesHighlight?(this: ShikijiTransformerContext, highlight: NodeHighlight, nodes: ElementContent[]): ElementContent[]
 }

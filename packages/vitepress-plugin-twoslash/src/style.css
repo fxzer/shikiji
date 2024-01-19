@@ -1,0 +1,118 @@
+.twoslash {
+  --twoslash-popup-bg: var(--vp-c-bg, inherit);
+  --twoslash-underline-color: #8888;
+  --twoslash-border-color: #8884;
+}
+
+.v-popper--theme-twoslash {
+  z-index: calc(var(--vp-z-index-local-nav) - 1);
+}
+
+.v-popper--theme-twoslash .v-popper__inner {
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
+  border-color: var(--vp-c-border);
+}
+
+.v-popper--theme-twoslash .v-popper__arrow-outer {
+  border-color: var(--vp-c-border);
+}
+
+.v-popper--theme-twoslash .v-popper__arrow-inner {
+  border-color: var(--vp-c-bg, inherit);
+}
+
+.twoslash-popup-container {
+  transform: translateY(1.5em);
+}
+
+.twoslash-query-presisted .twoslash-popup-container {
+  transform: translateY(1.8em);
+}
+
+.twoslash .v-popper {
+  display: inline-block;
+}
+
+.twoslash-completion-list .twoslash-completions-icon {
+  color: var(--twoslash-unmatched-color) !important;
+}
+
+.floating-vue-twoslash .twoslash-popup-code {
+  max-width: 600px;
+  display: block;
+  width: fit-content;
+  min-width: 100%;
+  padding: 6px 12px;
+  line-height: var(--vp-code-line-height);
+  font-size: var(--vp-code-font-size);
+  color: var(--vp-code-block-color);
+  transition: color 0.5s;
+  white-space: pre-wrap;
+}
+
+.floating-vue-twoslash .twoslash-popup-docs {
+  border-top: 1px solid var(--vp-c-border);
+  color: var(--vp-c-text-1);
+  padding: 0px 12px 0px 12px !important;
+  font-family: var(--vp-font-family-base);
+  font-size: 0.9em;
+  max-height: 500px;
+  max-width: 700px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  text-wrap: balance;
+}
+
+.floating-vue-twoslash .twoslash-popup-docs p {
+  margin: 0;
+  padding: 6px 0;
+  text-wrap: balance;
+}
+
+.floating-vue-twoslash .twoslash-popup-docs pre {
+  background-color: var(--vp-code-block-bg);
+  border-radius: 8px;
+  padding: 12px;
+  margin: 6px -2px;
+  overflow-x: auto;
+}
+
+.floating-vue-twoslash .twoslash-popup-docs-tags {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px !important;
+}
+
+.floating-vue-twoslash .twoslash-popup-docs-tags .twoslash-popup-docs-tag-name {
+  font-family: var(--vp-font-family-mono);
+  color: var(--vp-c-text-2);
+  margin-right: 0.5em;
+}
+
+.twoslash-completion-cursor {
+  height: 1.2em;
+  width: 2px;
+  margin-bottom: -0.2em;
+  background: var(--vp-c-brand);
+  display: inline-block;
+  user-select: none;
+}
+
+.floating-vue-twoslash-compeltion {
+  --twoslash-matched-color: var(--vp-c-brand);
+}
+
+.floating-vue-twoslash-compeltion .v-popper__arrow-container {
+  display: none;
+}
+
+.floating-vue-twoslash-compeltion .twoslash-completion-list {
+  padding: 6px;
+  font-family: var(--vp-font-family-mono);
+  font-size: var(--vp-code-font-size) !important;
+}
+
+.floating-vue-twoslash-compeltion .twoslash-completion-list li {
+  padding: 3px 0;
+}

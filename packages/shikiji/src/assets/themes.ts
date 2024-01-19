@@ -5,21 +5,33 @@ import type { DynamicImportThemeRegistration, BundledThemeInfo } from 'shikiji-c
 
 export const bundledThemesInfo: BundledThemeInfo[] = [
   {
+    "id": "andromeeda",
+    "displayName": "Andromeeda",
+    "type": "dark",
+    "import": (() => import('./themes/andromeeda')) as unknown as DynamicImportThemeRegistration
+  },
+  {
     "id": "aurora-x",
     "displayName": "Aurora X",
     "type": "dark",
     "import": (() => import('./themes/aurora-x')) as unknown as DynamicImportThemeRegistration
   },
   {
+    "id": "ayu-dark",
+    "displayName": "Ayu Dark",
+    "type": "dark",
+    "import": (() => import('./themes/ayu-dark')) as unknown as DynamicImportThemeRegistration
+  },
+  {
     "id": "catppuccin-frappe",
-    "displayName": "Catppuccin Frappe",
+    "displayName": "Catppuccin Frappé",
     "type": "dark",
     "import": (() => import('./themes/catppuccin-frappe')) as unknown as DynamicImportThemeRegistration
   },
   {
     "id": "catppuccin-latte",
     "displayName": "Catppuccin Latte",
-    "type": "dark",
+    "type": "light",
     "import": (() => import('./themes/catppuccin-latte')) as unknown as DynamicImportThemeRegistration
   },
   {
@@ -125,6 +137,12 @@ export const bundledThemesInfo: BundledThemeInfo[] = [
     "import": (() => import('./themes/monokai')) as unknown as DynamicImportThemeRegistration
   },
   {
+    "id": "night-owl",
+    "displayName": "Night Owl",
+    "type": "dark",
+    "import": (() => import('./themes/night-owl')) as unknown as DynamicImportThemeRegistration
+  },
+  {
     "id": "nord",
     "displayName": "Nord",
     "type": "dark",
@@ -191,6 +209,18 @@ export const bundledThemesInfo: BundledThemeInfo[] = [
     "import": (() => import('./themes/solarized-light')) as unknown as DynamicImportThemeRegistration
   },
   {
+    "id": "synthwave-84",
+    "displayName": "Synthwave '84",
+    "type": "dark",
+    "import": (() => import('./themes/synthwave-84')) as unknown as DynamicImportThemeRegistration
+  },
+  {
+    "id": "tokyo-night",
+    "displayName": "Tokyo Night",
+    "type": "dark",
+    "import": (() => import('./themes/tokyo-night')) as unknown as DynamicImportThemeRegistration
+  },
+  {
     "id": "vitesse-black",
     "displayName": "Vitesse Black",
     "type": "dark",
@@ -210,6 +240,6 @@ export const bundledThemesInfo: BundledThemeInfo[] = [
   }
 ]
 
-export type BundledTheme = 'aurora-x' | 'catppuccin-frappe' | 'catppuccin-latte' | 'catppuccin-macchiato' | 'catppuccin-mocha' | 'dark-plus' | 'dracula' | 'dracula-soft' | 'github-dark' | 'github-dark-dimmed' | 'github-light' | 'light-plus' | 'material-theme' | 'material-theme-darker' | 'material-theme-lighter' | 'material-theme-ocean' | 'material-theme-palenight' | 'min-dark' | 'min-light' | 'monokai' | 'nord' | 'one-dark-pro' | 'poimandres' | 'red' | 'rose-pine' | 'rose-pine-dawn' | 'rose-pine-moon' | 'slack-dark' | 'slack-ochin' | 'solarized-dark' | 'solarized-light' | 'vitesse-black' | 'vitesse-dark' | 'vitesse-light'
+export type BundledTheme = 'andromeeda' | 'aurora-x' | 'ayu-dark' | 'catppuccin-frappe' | 'catppuccin-latte' | 'catppuccin-macchiato' | 'catppuccin-mocha' | 'dark-plus' | 'dracula' | 'dracula-soft' | 'github-dark' | 'github-dark-dimmed' | 'github-light' | 'light-plus' | 'material-theme' | 'material-theme-darker' | 'material-theme-lighter' | 'material-theme-ocean' | 'material-theme-palenight' | 'min-dark' | 'min-light' | 'monokai' | 'night-owl' | 'nord' | 'one-dark-pro' | 'poimandres' | 'red' | 'rose-pine' | 'rose-pine-dawn' | 'rose-pine-moon' | 'slack-dark' | 'slack-ochin' | 'solarized-dark' | 'solarized-light' | 'synthwave-84' | 'tokyo-night' | 'vitesse-black' | 'vitesse-dark' | 'vitesse-light'
 
 export const bundledThemes = Object.fromEntries(bundledThemesInfo.map(i => [i.id, i.import])) as Record<BundledTheme, DynamicImportThemeRegistration>

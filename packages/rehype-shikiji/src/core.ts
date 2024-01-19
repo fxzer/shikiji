@@ -5,13 +5,19 @@ import type { BuiltinTheme } from 'shikiji'
 import type { Plugin } from 'unified'
 import { toString } from 'hast-util-to-string'
 import { visit } from 'unist-util-visit'
-import { parseHighlightLines } from '../../shared/line-highlight'
+import { transformerMetaHighlight } from 'shikiji-transformers'
+
+export interface MapLike<K = any, V = any> {
+  get(key: K): V | undefined
+  set(key: K, value: V): this
+}
 
 export interface RehypeShikijiExtraOptions {
   /**
    * Add `highlighted` class to lines defined in after codeblock
    *
-   * @default true
+   * @deprecated Use [transformerNotationHighlight](https://shikiji.netlify.app/packages/transformers#transformernotationhighlight) instead
+   * @default false
    */
   highlightLines?: boolean | string
 
@@ -33,6 +39,13 @@ export interface RehypeShikijiExtraOptions {
   ) => Record<string, any> | undefined | null
 
   /**
+   * Custom map to cache transformed codeToHast result
+   *
+   * @default undefined
+   */
+  cache?: MapLike
+
+  /**
    * Chance to handle the error
    * If not provided, the error will be thrown
    */
@@ -50,9 +63,10 @@ const rehypeShikijiFromHighlighter: Plugin<[HighlighterGeneric<any, any>, Rehype
   options,
 ) {
   const {
-    highlightLines = true,
+    highlightLines = false,
     addLanguageClass = false,
     parseMetaString,
+    cache,
     ...rest
   } = options
 
@@ -86,6 +100,14 @@ const rehypeShikijiFromHighlighter: Plugin<[HighlighterGeneric<any, any>, Rehype
         return
 
       const code = toString(head as any)
+
+      const cachedValue = cache?.get(code)
+
+      if (cachedValue) {
+        parent.children.splice(index, 1, ...cachedValue)
+        return
+      }
+
       const attrs = (head.data as any)?.meta
       const meta = parseMetaString?.(attrs, node, tree) || {}
 
@@ -111,26 +133,19 @@ const rehypeShikijiFromHighlighter: Plugin<[HighlighterGeneric<any, any>, Rehype
       }
 
       if (highlightLines && typeof attrs === 'string') {
-        const lines = parseHighlightLines(attrs)
-        if (lines) {
-          const className = highlightLines === true
-            ? 'highlighted'
-            : highlightLines
-
-          codeOptions.transformers ||= []
-          codeOptions.transformers.push({
-            name: 'rehype-shikiji:line-class',
-            line(node, line) {
-              if (lines.includes(line))
-                addClassToHast(node, className)
-              return node
-            },
-          })
-        }
+        codeOptions.transformers ||= []
+        codeOptions.transformers.push(
+          transformerMetaHighlight({
+            className: highlightLines === true
+              ? 'highlighted'
+              : highlightLines,
+          }),
+        )
       }
 
       try {
         const fragment = highlighter.codeToHast(code, codeOptions)
+        cache?.set(code, fragment.children)
         parent.children.splice(index, 1, ...fragment.children)
       }
       catch (error) {

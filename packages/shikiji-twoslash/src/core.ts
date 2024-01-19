@@ -2,35 +2,34 @@
  * This file is the core of the shikiji-twoslash package,
  * Decoupled from twoslash's implementation and allowing to introduce custom implementation or cache system.
  */
-import type { twoslasher } from '@typescript/twoslash'
+import type { TwoslashExecuteOptions, TwoslashReturn } from 'twoslash'
 import type { ShikijiTransformer } from 'shikiji-core'
 import type { Element, ElementContent, Text } from 'hast'
-import type { ModuleKind, ScriptTarget } from 'typescript'
 
 import { addClassToHast } from 'shikiji-core'
-import { rendererClassic } from './renderer-classic'
-import type { TransformerTwoSlashOptions } from './types'
+import type { TransformerTwoslashOptions, TwoslashRenderer } from './types'
 
 export * from './types'
-export * from './renderer-classic'
 export * from './renderer-rich'
+export * from './renderer-classic'
 export * from './icons'
 
-export function defaultTwoSlashOptions() {
+export function defaultTwoslashOptions(): TwoslashExecuteOptions {
   return {
     customTags: ['annotate', 'log', 'warn', 'error'],
-    defaultCompilerOptions: {
-      module: 99 satisfies ModuleKind.ESNext,
-      target: 99 satisfies ScriptTarget.ESNext,
-    },
   }
 }
 
-export function createTransformerFactory(defaultTwoslasher: typeof twoslasher) {
-  return function transformerTwoSlash(options: TransformerTwoSlashOptions = {}): ShikijiTransformer {
+type TwoslashFunction = (code: string, lang?: string, options?: TwoslashExecuteOptions) => TwoslashReturn
+
+export function createTransformerFactory(
+  defaultTwoslasher: TwoslashFunction,
+  defaultRenderer?: TwoslashRenderer,
+) {
+  return function transformerTwoslash(options: TransformerTwoslashOptions = {}): ShikijiTransformer {
     const {
       langs = ['ts', 'tsx'],
-      twoslashOptions = defaultTwoSlashOptions(),
+      twoslashOptions = defaultTwoslashOptions(),
       langAlias = {
         typescript: 'ts',
         json5: 'json',
@@ -38,22 +37,62 @@ export function createTransformerFactory(defaultTwoslasher: typeof twoslasher) {
       },
       twoslasher = defaultTwoslasher,
       explicitTrigger = false,
-      renderer = rendererClassic(),
+      renderer = defaultRenderer,
       throws = true,
     } = options
+
+    if (!renderer)
+      throw new Error('[shikiji-twoslash] Missing renderer')
+
     const filter = options.filter || ((lang, _, options) => langs.includes(lang) && (!explicitTrigger || /\btwoslash\b/.test(options.meta?.__raw || '')))
     return {
-      preprocess(code, shikijiOptions) {
-        let lang = shikijiOptions.lang
+      preprocess(code) {
+        let lang = this.options.lang
         if (lang in langAlias)
-          lang = langAlias[shikijiOptions.lang]
+          lang = langAlias[this.options.lang]
 
-        if (filter(lang, code, shikijiOptions)) {
-          shikijiOptions.mergeWhitespaces = 'never'
+        if (filter(lang, code, this.options)) {
+          this.options.mergeWhitespaces = 'never'
           const twoslash = twoslasher(code, lang, twoslashOptions)
           this.meta.twoslash = twoslash
+          this.options.lang = twoslash.meta.extension || lang
           return twoslash.code
         }
+      },
+      tokens(tokens) {
+        if (!this.meta.twoslash)
+          return
+
+        // Break tokens at the boundaries of twoslash nodes
+        const breakpoints = Array.from(new Set(this.meta.twoslash.nodes.flatMap(i =>
+          ['hover', 'error', 'query', 'highlight'].includes(i.type)
+            ? [i.start, i.start + i.length]
+            : [],
+        ))).sort()
+
+        return tokens.map((line) => {
+          return line.flatMap((token) => {
+            const breakpointsInToken = breakpoints
+              .filter(i => token.offset < i && i < token.offset + token.content.length)
+              .map(i => i - token.offset)
+
+            if (!breakpointsInToken.length)
+              return token
+
+            breakpointsInToken.push(token.content.length)
+            breakpointsInToken.sort((a, b) => a - b)
+            let lastDelta = 0
+            return breakpointsInToken.map((i) => {
+              const n = {
+                ...token,
+                content: token.content.slice(lastDelta, i),
+                offset: token.offset + lastDelta,
+              }
+              lastDelta = i
+              return n
+            })
+          })
+        })
       },
       pre(pre) {
         if (this.meta.twoslash)
@@ -88,98 +127,148 @@ export function createTransformerFactory(defaultTwoslasher: typeof twoslasher) {
           codeEl.children.splice(index + 1, 0, ...nodes)
         }
 
-        const locateTextToken = (
+        // Build a map of tokens to their line and character position
+        const tokensMap: [line: number, charStart: number, charEnd: number, token: Element | Text][] = []
+        this.lines.forEach((lineEl, line) => {
+          let index = 0
+          for (const token of lineEl.children.flatMap(i => i.type === 'element' ? i.children || [] : []) as (Text | Element)[]) {
+            if ('value' in token && typeof token.value === 'string') {
+              tokensMap.push([line, index, index + token.value.length, token])
+              index += token.value.length
+            }
+          }
+        })
+
+        // Find tokens are in range of a node, it can may multiple tokens.
+        const locateTextTokens = (
           line: number,
           character: number,
+          length: number,
         ) => {
-          const lineEl = this.lines[line]
-          if (!lineEl) {
-            if (throws)
-              throw new Error(`[shikiji-twoslash] Cannot find line ${line} in code element`)
+          const start = character
+          const end = character + length
+          // When the length is 0 (completion), we find the token that contains it
+          if (length === 0) {
+            return tokensMap
+              .filter(([l, s, e]) => l === line && s < start && start <= e)
+              .map(i => i[3])
           }
-          const textNodes = lineEl.children.flatMap(i => i.type === 'element' ? i.children || [] : []) as (Text | Element)[]
-          let index = 0
-          for (const token of textNodes) {
-            if ('value' in token && typeof token.value === 'string')
-              index += token.value.length
-
-            if (index > character)
-              return token
-          }
-          if (throws)
-            throw new Error(`[shikiji-twoslash] Cannot find token at L${line}:${character}`)
+          // Otherwise we find the tokens that are completely inside the range
+          // Because we did the breakpoints earlier, we can safely assume that there will be no across-boundary tokens
+          return tokensMap
+            .filter(([l, s, e]) => l === line && (start <= s && s < end) && (start < e && e <= end))
+            .map(i => i[3])
         }
 
-        const skipTokens = new Set<Element | Text>()
+        const tokensSkipHover = new Set<Element | Text>()
+        const actionsHovers: (() => void)[] = []
+        const actionsHighlights: (() => void)[] = []
 
-        for (const error of twoslash.errors) {
-          if (error.line == null || error.character == null)
-            return
-          const token = locateTextToken(error.line, error.character)
-          if (!token)
+        for (const node of twoslash.nodes) {
+          if (node.type === 'tag') {
+            if (renderer.lineCustomTag)
+              insertAfterLine(node.line, renderer.lineCustomTag.call(this, node))
             continue
-
-          skipTokens.add(token)
-
-          if (renderer.nodeError) {
-            const clone = { ...token }
-            Object.assign(token, renderer.nodeError.call(this, error, clone))
           }
 
-          if (renderer.lineError)
-            insertAfterLine(error.line, renderer.lineError.call(this, error))
-        }
+          const tokens = locateTextTokens(node.line, node.character, node.length)
 
-        for (const query of twoslash.queries) {
-          if (query.kind === 'completions') {
-            const token = locateTextToken(query.line - 1, query.offset)
-            if (!token)
-              throw new Error(`[shikiji-twoslash] Cannot find token at L${query.line}:${query.offset}`)
-            skipTokens.add(token)
-
-            if (renderer.nodeCompletions) {
-              const clone = { ...token }
-              Object.assign(token, renderer.nodeCompletions.call(this, query, clone))
+          switch (node.type) {
+            case 'error': {
+              if (renderer.nodeError) {
+                tokens.forEach((token) => {
+                  tokensSkipHover.add(token)
+                  const clone = { ...token }
+                  Object.assign(token, renderer.nodeError!.call(this, node, clone))
+                })
+              }
+              if (renderer.lineError)
+                insertAfterLine(node.line, renderer.lineError.call(this, node))
+              break
             }
-
-            if (renderer.lineCompletions)
-              insertAfterLine(query.line, renderer.lineCompletions.call(this, query))
-          }
-          else if (query.kind === 'query') {
-            const token = locateTextToken(query.line - 1, query.offset)
-            if (!token)
-              throw new Error(`[shikiji-twoslash] Cannot find token at L${query.line}:${query.offset}`)
-
-            skipTokens.add(token)
-
-            if (renderer.nodeQuery) {
-              const clone = { ...token }
-              Object.assign(token, renderer.nodeQuery.call(this, query, clone))
+            case 'query': {
+              const token = tokens[0]
+              if (token && renderer.nodeQuery) {
+                tokensSkipHover.add(token)
+                const clone = { ...token }
+                Object.assign(token, renderer.nodeQuery!.call(this, node, clone))
+              }
+              if (renderer.lineQuery)
+                insertAfterLine(node.line, renderer.lineQuery.call(this, node, token))
+              break
             }
+            case 'completion': {
+              if (renderer.nodeCompletion) {
+                tokens.forEach((token) => {
+                  tokensSkipHover.add(token)
+                  const clone = { ...token }
+                  Object.assign(token, renderer.nodeCompletion!.call(this, node, clone))
+                })
+              }
+              if (renderer.lineCompletion)
+                insertAfterLine(node.line, renderer.lineCompletion.call(this, node))
+              break
+            }
+            case 'highlight': {
+              if (renderer.nodesHighlight) {
+                actionsHighlights.push(() => {
+                  const line = this.lines[node.line]
+                  let charIndex = 0
+                  let itemStart = line.children.length
+                  let itemEnd = 0
 
-            if (renderer.lineQuery)
-              insertAfterLine(query.line, renderer.lineQuery.call(this, query, token))
+                  line.children.forEach((token, index) => {
+                    if (charIndex >= node.character && index < itemStart)
+                      itemStart = index
+                    if ((charIndex <= node.character + node.length) && index > itemEnd)
+                      itemEnd = index
+                    charIndex += getTokenString(token).length
+                  })
+
+                  if ((charIndex <= node.character + node.length))
+                    itemEnd = line.children.length
+
+                  const targets = line.children.slice(itemStart, itemEnd)
+                  const length = targets.length
+                  const highlighted = renderer.nodesHighlight?.call(this, node, targets) || targets
+                  line.children.splice(itemStart, length, ...highlighted)
+                })
+              }
+              break
+            }
+            case 'hover': {
+              // Hover will be handled after all other nodes are processed
+              if (renderer.nodeStaticInfo) {
+                actionsHovers.push(() => {
+                  tokens.forEach((token) => {
+                    if (tokensSkipHover.has(token))
+                      return
+                    // Already hovered, don't hover again
+                    tokensSkipHover.add(token)
+                    const clone = { ...token }
+                    Object.assign(token, renderer.nodeStaticInfo.call(this, node, clone))
+                  })
+                })
+              }
+              break
+            }
+            default: {
+              if (throws)
+                // @ts-expect-error Unknown node type
+                throw new Error(`[shikiji-twoslash] Unknown node type: ${node.type}`)
+            }
           }
         }
 
-        for (const info of twoslash.staticQuickInfos) {
-          const token = locateTextToken(info.line, info.character)
-          if (!token || token.type !== 'text')
-            continue
-
-          // If it's already rendered as popup or error, skip it
-          if (skipTokens.has(token))
-            continue
-
-          const clone = { ...token }
-          Object.assign(token, renderer.nodeStaticInfo.call(this, info, clone))
-        }
-
-        if (renderer.lineCustomTag) {
-          for (const tag of twoslash.tags)
-            insertAfterLine(tag.line, renderer.lineCustomTag.call(this, tag))
-        }
+        actionsHovers.forEach(i => i())
+        actionsHighlights.forEach(i => i())
       },
     }
   }
+}
+
+function getTokenString(token: ElementContent): string {
+  if ('value' in token)
+    return token.value
+  return token.children?.map(getTokenString).join('') || ''
 }

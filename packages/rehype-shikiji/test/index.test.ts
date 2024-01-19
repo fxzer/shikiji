@@ -4,6 +4,7 @@ import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import rehypeStringify from 'rehype-stringify'
 import { expect, it } from 'vitest'
+import { transformerMetaHighlight, transformerMetaWordHighlight } from 'shikiji-transformers'
 import rehypeShikiji from '../src'
 
 it('run', async () => {
@@ -12,6 +13,10 @@ it('run', async () => {
     .use(remarkRehype)
     .use(rehypeShikiji, {
       theme: 'vitesse-light',
+      transformers: [
+        transformerMetaWordHighlight(),
+        transformerMetaHighlight(),
+      ],
       parseMetaString: (str) => {
         return Object.fromEntries(str.split(' ').reduce((prev: [string, boolean | string][], curr: string) => {
           const [key, value] = curr.split('=')
@@ -40,4 +45,20 @@ it('code-add-language-class', async () => {
     .process(await fs.readFile(new URL('./fixtures/b.md', import.meta.url)))
 
   expect(file.toString()).toMatchFileSnapshot('./fixtures/b.out.html')
+})
+
+it('add-custom-cache', async () => {
+  const cache = new Map()
+  const file = await unified()
+    .use(remarkParse)
+    .use(remarkRehype)
+    .use(rehypeShikiji, {
+      theme: 'vitesse-light',
+      addLanguageClass: true,
+      cache,
+    })
+    .use(rehypeStringify)
+    .process(await fs.readFile(new URL('./fixtures/c.md', import.meta.url)))
+
+  expect(file.toString()).toMatchFileSnapshot('./fixtures/c.out.html')
 })

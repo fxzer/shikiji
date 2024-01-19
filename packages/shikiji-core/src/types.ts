@@ -5,7 +5,7 @@ import type {
   IRawGrammar as RawGrammar,
   IRawTheme as RawTheme,
 } from './textmate'
-import type { OnigurumaLoadOptions } from './oniguruma'
+import type { LoadWasmOptions } from './oniguruma'
 
 export {
   Grammar,
@@ -65,6 +65,9 @@ export interface ShikiInternal {
   updateAlias(alias: Record<string, string>): void
 }
 
+/**
+ * Generic instance interface of Shikiji
+ */
 export interface HighlighterGeneric<BundledLangKeys extends string, BundledThemeKeys extends string> {
   /**
    * Get highlighted code in HTML string
@@ -161,7 +164,7 @@ export interface HighlighterCoreOptions {
   /**
    * Load wasm file from a custom path or using a custom function.
    */
-  loadWasm?: OnigurumaLoadOptions | (() => Promise<OnigurumaLoadOptions>)
+  loadWasm?: LoadWasmOptions
 }
 
 export interface BundledHighlighterOptions<L extends string, T extends string> {
@@ -269,12 +272,12 @@ export interface CodeOptionsMultipleThemes<Themes extends string = string> {
    * This allows you to specify multiple themes for the generated code.
    *
    * ```ts
-   * shiki.codeToHtml(code, {
-   *  lang: 'js',
-   *  themes: {
-   *    light: 'vitesse-light',
-   *    dark: 'vitesse-dark',
-   *  }
+   * highlighter.codeToHtml(code, {
+   *   lang: 'js',
+   *   themes: {
+   *     light: 'vitesse-light',
+   *     dark: 'vitesse-dark',
+   *   }
    * })
    * ```
    *
@@ -343,14 +346,9 @@ export interface CodeOptionsMeta {
 
 export interface TransformerOptions {
   /**
-   * Transform the generated HAST tree.
+   * Transformers for the Shikiji pipeline.
    */
   transformers?: ShikijiTransformer[]
-
-  /**
-   * @deprecated use `transformers` instead
-   */
-  transforms?: ShikijiTransformer
 }
 
 export type CodeToHastOptions<Languages extends string = string, Themes extends string = string> =
@@ -448,12 +446,18 @@ export type ThemeRegistrationAny = ThemeRegistrationRaw | ThemeRegistration | Th
 
 export interface ShikijiTransformerContextMeta {}
 
+/**
+ * Common transformer context for all transformers hooks
+ */
 export interface ShikijiTransformerContextCommon {
   meta: ShikijiTransformerContextMeta
   options: CodeToHastOptions
   codeToHast: (code: string, options: CodeToHastOptions) => Root
 }
 
+/**
+ * Transformer context for HAST related hooks
+ */
 export interface ShikijiTransformerContext extends ShikijiTransformerContextCommon {
   readonly tokens: ThemedToken[][]
   readonly root: Root
@@ -467,6 +471,15 @@ export interface ShikijiTransformer {
    * Name of the transformer
    */
   name?: string
+  /**
+   * Transform the raw input code before passing to the highlighter.
+   */
+  preprocess?(this: ShikijiTransformerContextCommon, code: string, options: CodeToHastOptions): string | void
+  /**
+   * Transform the full tokens list before converting to HAST.
+   * Return a new tokens list will replace the original one.
+   */
+  tokens?(this: ShikijiTransformerContextCommon, tokens: ThemedToken[][]): ThemedToken[][] | void
   /**
    * Transform the entire generated HAST tree. Return a new Node will replace the original one.
    */
@@ -489,18 +502,18 @@ export interface ShikijiTransformer {
   /**
    * Transform each token `<span>` element.
    */
-  token?(this: ShikijiTransformerContext, hast: Element, line: number, col: number, lineElement: Element): Element | void
-
-  /**
-   * Transform the raw input code before passing to the highlighter.
-   * This hook will only be called with `codeToHtml` or `codeToHast`.
-   */
-  preprocess?(this: ShikijiTransformerContextCommon, code: string, options: CodeToHastOptions): string | void
+  span?(this: ShikijiTransformerContext, hast: Element, line: number, col: number, lineElement: Element): Element | void
   /**
    * Transform the generated HTML string before returning.
    * This hook will only be called with `codeToHtml`.
    */
   postprocess?(this: ShikijiTransformerContextCommon, html: string, options: CodeToHastOptions): string | void
+
+  // deprecated
+  /**
+   * @deprecated Use `span` instead
+   */
+  token?(this: ShikijiTransformerContext, hast: Element, line: number, col: number, lineElement: Element): Element | void
 }
 
 export interface HtmlRendererOptionsCommon extends TransformerOptions {
@@ -535,6 +548,7 @@ export interface ThemedTokenExplanation {
  *
  * For example:
  *
+ * ```json
  * {
  *   "content": "shiki",
  *   "color": "#D8DEE9",
@@ -581,7 +595,7 @@ export interface ThemedTokenExplanation {
  *     }
  *   ]
  * }
- *
+ * ```
  */
 export interface ThemedToken extends TokenStyles, TokenBase {}
 
@@ -590,6 +604,10 @@ export interface TokenBase {
    * The content of the token
    */
   content: string
+  /**
+   * The start offset of the token, relative to the input code. 0-indexed.
+   */
+  offset: number
   /**
    * Explanation of
    *

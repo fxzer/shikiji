@@ -11,7 +11,8 @@ export const BUNDLED_THEMES = bundledThemes
 export * from './stub'
 export * from './types'
 
-export { toShikiTheme } from 'shikiji'
+export { normalizeTheme } from 'shikiji'
+export { normalizeTheme as toShikiTheme } from 'shikiji'
 
 export async function getHighlighter(options: HighlighterOptions = {}) {
   const themes = options.themes || []
@@ -45,6 +46,8 @@ export async function getHighlighter(options: HighlighterOptions = {}) {
       line.forEach((token) => {
         // Shiki always provides `explanation` array, even it's disabled
         token.explanation ||= []
+        // @ts-expect-error Shiki does not have `offset` in `ThemedToken`
+        delete token.offset
       })
     })
 
